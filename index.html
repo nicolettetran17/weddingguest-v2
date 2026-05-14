@@ -1,0 +1,4770 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Aria & Marcus · Guest Portal — All-In Weddings</title>
+  <meta name="description" content="The official guest portal for Aria & Marcus's wedding at AVA Resort Cancún. Book your room block, browse on-property spa, excursions, and dinners." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       Guest Portal — AVA Resort Cancún edition.
+       Re-skinned to AVA's brand language: magenta primary, sunset
+       coral secondary, sandy-cream neutrals, near-black ink, and the
+       editorial Cormorant + Montserrat typography pairing that signals
+       coastal modern luxury. The "Oceanfront Promise" backdrop runs
+       through hero, timeline rail, and accents.
+       ============================================================ */
+
+    :root {
+      /* Neutrals — warm, sandy, editorial near-black */
+      --ink:            #1a1a1a;     /* AVA editorial near-black */
+      --ink-soft:       #3b3633;
+      --ink-muted:      #6a655f;
+      --ink-faint:      #9a948b;
+      --paper:          #ffffff;
+      --paper-warm:     #faf6ee;     /* warm sand cream */
+      --paper-cream:    #f3ead9;     /* sandy stone */
+      --canvas:         #f5efe2;     /* page background — Caribbean sand */
+
+      /* AVA brand magenta (primary accent) — replaces sage everywhere */
+      --brand-pale:     #fce6f0;     /* very soft blush */
+      --brand-glow:     #ff7eb6;     /* bright pink for hero shine on dark */
+      --brand:          #c8307a;     /* AVA magenta (primary CTA, eyebrows) */
+      --brand-deep:     #9c1f5d;     /* deeper magenta — "added/savings" */
+      --brand-darker:   #5f1138;     /* deepest plum — strong contrast text */
+      --brand-bg:       rgba(200,48,122,0.10);
+
+      /* Sunset coral (secondary accent — used sparingly) */
+      --coral:          #e76f51;
+      --coral-soft:     #f4b1a4;
+
+      /* Caribbean turquoise (tertiary accent — water cue) */
+      --turquoise:      #3fa9b5;
+
+      --rule:           rgba(26,26,26,0.10);
+      --rule-soft:      rgba(26,26,26,0.06);
+      --shadow:         0 14px 32px -22px rgba(0,0,0,0.30);
+      --serif:          "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans:           "Montserrat", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button { font: inherit; cursor: pointer; }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--paper-warm);
+      box-shadow: 0 0 0 1px var(--rule-soft);
+    }
+
+    /* ============================================================
+       Top bar
+       ============================================================ */
+    .bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 22px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule);
+      position: sticky; top: 0; z-index: 30;
+    }
+    .bar__crest {
+      display: grid; place-items: center;
+      width: 28px; height: 28px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--brand-darker) 0%, var(--brand-deep) 100%);
+      color: #fff;
+    }
+    .bar__brand {
+      font-family: var(--serif);
+      font-size: 14px; line-height: 1.1; color: var(--ink);
+      letter-spacing: 0.2px;
+    }
+    .bar__divider { color: #b3aea4; font-size: 11px; }
+    .bar__product {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--brand-deep); font-weight: 600;
+    }
+    .bar__user {
+      margin-left: auto; display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: var(--ink-soft);
+    }
+    .bar__avatar {
+      width: 28px; height: 28px; border-radius: 9999px;
+      background: linear-gradient(135deg, #d94d92, #5f1138);
+      color: #fff; display: grid; place-items: center;
+      font-size: 11px; font-weight: 600;
+    }
+    .bar__signout {
+      background: none; border: 0; padding: 0;
+      font-size: 11px; color: var(--brand-deep);
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+    /* Clickable profile chip — opens the profile screen */
+    .bar__profile {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      color: var(--ink-soft);
+      font: inherit;
+      font-size: 12px;
+    }
+    .bar__profile:hover .bar__profile-name { color: var(--ink); }
+    .bar__profile:hover .bar__avatar { box-shadow: 0 0 0 3px rgba(200,48,122,0.18); }
+    .bar__profile-name { transition: color 120ms ease; }
+    .bar__avatar { transition: box-shadow 120ms ease; }
+    /* "Refer & earn" pill — sits in the bar, switches to a deeper
+       plum "voucher earned" state once a friend has booked. */
+    .bar__refer {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 11px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--brand-bg);
+      color: var(--brand-deep);
+      border: 1px solid rgba(200,48,122,0.32);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 120ms ease, transform 120ms ease, color 120ms ease, border-color 120ms ease;
+      white-space: nowrap;
+    }
+    .bar__refer:hover {
+      background: rgba(200,48,122,0.16);
+      transform: translateY(-1px);
+    }
+    .bar__refer--earned {
+      background: var(--brand-darker);
+      color: var(--brand-glow);
+      border-color: var(--brand-darker);
+    }
+    .bar__refer--earned:hover { background: var(--brand-deep); color: #fff; }
+    @media (max-width: 720px) {
+      .bar { gap: 6px; padding: 12px 14px; }
+      .bar__divider, .bar__product { display: none; }
+      .bar__profile-name { display: none; }
+      .bar__refer { font-size: 9.5px; padding: 5px 8px; letter-spacing: 0.08em; }
+    }
+
+    /* ============================================================
+       Section nav
+       ============================================================ */
+    .nav {
+      display: flex; gap: 6px;
+      padding: 12px 22px 0;
+      background: var(--paper);
+      border-bottom: 1px solid var(--rule-soft);
+      overflow-x: auto;
+      scrollbar-width: none;
+      position: sticky; top: 57px; z-index: 20;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav__tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 14px 12px;
+      border: 0;
+      background: transparent;
+      color: var(--ink-muted);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 200ms ease, border-color 200ms ease;
+    }
+    .nav__tab:hover { color: var(--ink); }
+    .nav__tab[data-active="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--brand);
+    }
+    .nav__tab svg { width: 14px; height: 14px; }
+
+    /* ============================================================
+       Hero countdown
+       ============================================================ */
+    .hero {
+      position: relative;
+      padding: 38px 28px 32px;
+      background:
+        radial-gradient(900px 420px at 80% 0%, rgba(200,48,122,0.42), transparent 55%),
+        radial-gradient(700px 480px at 10% 100%, rgba(231,111,81,0.22), transparent 60%),
+        linear-gradient(140deg, #131113 0%, #1f1518 55%, #2b1820 100%);
+      color: #fbf3ec;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1.6px),
+        radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1.6px);
+      background-size: 60px 60px, 90px 90px;
+      background-position: 0 0, 30px 45px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .hero__bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover; background-position: center;
+      opacity: 0.22;
+      filter: saturate(1.15) blur(0.5px);
+      mix-blend-mode: lighten;
+    }
+    .hero__inner {
+      position: relative;
+      max-width: 760px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .hero__eyebrow {
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--brand-pale);
+      margin: 0;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .hero__eyebrow::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 9999px;
+      background: var(--brand-pale);
+      box-shadow: 0 0 0 0 rgba(255,126,182,0.55);
+      animation: pulse 2.2s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255,126,182,0.55); }
+      80%  { box-shadow: 0 0 0 12px rgba(255,126,182,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,126,182,0); }
+    }
+    .hero__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -0.4px;
+      color: #fff;
+    }
+    .hero__title em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--brand-glow) 0%, #fff0f6 50%, var(--brand-glow) 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 5.5s linear infinite;
+    }
+    @keyframes shine {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .hero__sub {
+      margin: 0; font-size: 15px;
+      color: rgba(248,243,233,0.82);
+      max-width: 56ch;
+    }
+    .hero__count {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 540px;
+    }
+    .hero__cell {
+      position: relative;
+      padding: 14px 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,126,182,0.18);
+      backdrop-filter: blur(8px);
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero__cell::after {
+      content: "";
+      position: absolute; left: 0; right: 0; top: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,126,182,0.5), transparent);
+    }
+    .hero__num {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(28px, 4.6vw, 40px);
+      line-height: 1;
+      color: #fff;
+      letter-spacing: -0.5px;
+      font-feature-settings: "tnum" 1;
+    }
+    .hero__lbl {
+      display: block;
+      margin-top: 6px;
+      font-size: 9.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,126,182,0.85);
+      font-weight: 600;
+    }
+    .hero__meta {
+      margin-top: 14px;
+      display: flex; flex-wrap: wrap; gap: 18px;
+      font-size: 12px; color: rgba(248,243,233,0.78);
+    }
+    .hero__meta strong { color: var(--brand-pale); font-weight: 600; }
+
+    /* ============================================================
+       Stat strip
+       ============================================================ */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 18px 22px 4px;
+      background: var(--paper);
+    }
+    @media (min-width: 720px) {
+      .stats { grid-template-columns: repeat(4, 1fr); }
+    }
+    .stat-pill {
+      padding: 12px 14px;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule-soft);
+      border-radius: 12px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .stat-pill__lbl {
+      font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-faint); font-weight: 600;
+    }
+    .stat-pill__val {
+      font-family: var(--serif);
+      font-size: 17px; line-height: 1.2;
+      color: var(--ink);
+    }
+
+    /* ============================================================
+       Action tiles
+       ============================================================ */
+    .actions {
+      padding: 20px 22px 8px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) {
+      .actions { grid-template-columns: 1fr 1fr; }
+    }
+    .action {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 14px; align-items: center;
+      padding: 18px 18px 18px 16px;
+      background: var(--paper);
+      border: 1px solid rgba(28,28,28,0.07);
+      border-radius: 14px;
+      text-align: left;
+      color: var(--ink);
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 220ms ease,
+                  border-color 220ms ease;
+    }
+    .action:hover, .action:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(200,48,122,0.55);
+      box-shadow: 0 14px 32px -22px rgba(200,48,122,0.55), 0 0 0 1px rgba(200,48,122,0.15);
+      outline: none;
+    }
+    .action__icon {
+      width: 44px; height: 44px;
+      border-radius: 11px;
+      background: linear-gradient(140deg, rgba(200,48,122,0.18) 0%, rgba(200,48,122,0.08) 100%);
+      color: var(--brand-deep);
+      display: grid; place-items: center;
+    }
+    .action__icon svg { width: 20px; height: 20px; }
+    .action__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .action__title {
+      font-family: var(--serif);
+      font-size: 19px; line-height: 1.15; color: var(--ink);
+    }
+    .action__body p {
+      font-size: 12.5px; line-height: 1.45; color: var(--ink-muted);
+      margin: 0;
+    }
+    .action__chev {
+      color: #b3aea4;
+      transition: transform 220ms ease, color 220ms ease;
+    }
+    .action:hover .action__chev {
+      color: var(--brand);
+      transform: translateX(3px);
+    }
+    .action__badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 6px;
+      padding: 2px 8px;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 700;
+      border-radius: 9999px;
+      background: rgba(200,48,122,0.15);
+      color: var(--brand-deep);
+      align-self: flex-start;
+    }
+    /* Strong-accent badge variant — solid magenta chip for "premium" callouts
+       (e.g. discount %, "wedding rate"). Class name kept as `--copper` only
+       to avoid touching the JS templates that emit it. */
+    .action__badge--copper {
+      background: var(--brand);
+      color: #fbfdf9;
+      box-shadow: 0 1px 2px rgba(95,17,56,0.18);
+    }
+
+    /* ============================================================
+       Generic section
+       ============================================================ */
+    .section {
+      padding: 22px 26px 100px;
+      min-height: 100%;
+    }
+    .section__head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .section__back {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 10px 6px 8px;
+      border-radius: 9999px;
+      background: var(--paper);
+      border: 1px solid rgba(28,28,28,0.08);
+      font-size: 11.5px; letter-spacing: 0.06em; font-weight: 600;
+      color: var(--ink-soft);
+    }
+    .section__back:hover { background: var(--paper-warm); border-color: rgba(28,28,28,0.18); }
+    .section__eyebrow {
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep); margin: 8px 0 2px;
+    }
+    .section__title {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.05; letter-spacing: -0.4px;
+      color: var(--ink);
+    }
+    .section__title em { font-style: italic; color: var(--brand-deep); }
+    .section__sub {
+      margin: 6px 0 22px;
+      font-size: 14px; line-height: 1.55;
+      color: var(--ink-soft);
+      max-width: 64ch;
+    }
+
+    /* ============================================================
+       Schedule timeline (Home + Schedule section)
+       ============================================================ */
+    .schedule {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+      padding: 4px 22px 24px;
+    }
+    @media (min-width: 720px) {
+      .schedule { grid-template-columns: repeat(3, 1fr); }
+    }
+    .schedule__day {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .schedule__date {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep);
+      margin: 0 0 4px;
+    }
+    .schedule__title {
+      font-family: var(--serif);
+      font-size: 20px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0 0 12px;
+      font-weight: 500;
+    }
+    .schedule__events { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .schedule__event {
+      display: grid; grid-template-columns: 60px 1fr; gap: 12px; align-items: baseline;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--rule);
+    }
+    .schedule__event:last-child { border-bottom: 0; }
+    .schedule__time {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 14px;
+      color: var(--brand-deep);
+    }
+    .schedule__what { font-size: 13px; color: var(--ink); }
+    .schedule__what em {
+      display: block;
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      font-style: normal;
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ============================================================
+       Wedding-weekend TIMELINE — anchor of the home + schedule pages.
+       Vertical magenta rail running through three day banners; each day
+       merges fixed wedding events with Allie's recommended upsells in
+       chronological order so guests see the whole weekend at once.
+       ============================================================ */
+    .tl {
+      position: relative;
+      padding: 8px 22px 32px;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    /* Day banner */
+    .tl-day {
+      display: flex; align-items: baseline; gap: 14px;
+      padding: 28px 0 14px 0;
+      position: relative;
+    }
+    .tl-day:first-child { padding-top: 8px; }
+    .tl-day__eyebrow {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep);
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .tl-day__title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.05;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.3px;
+      font-style: italic;
+    }
+    .tl-day__rule {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--rule) 0%, transparent 100%);
+      margin-left: 4px;
+    }
+
+    /* Each row: time | marker (with rail) | content */
+    .tl-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: clamp(54px, 12vw, 78px) 28px 1fr;
+      gap: 14px;
+      padding: 6px 0;
+      align-items: stretch;
+    }
+    .tl-row__time {
+      padding-top: 18px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 14px;
+      color: var(--brand-deep);
+      text-align: right;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    /* Marker column carries the vertical magenta rail and the dot. */
+    .tl-row__rail {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    /* The vertical line is drawn by an absolute pseudo behind the dot
+       so it connects through every row in the column. */
+    .tl-row__rail::before {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 1.5px;
+      background: linear-gradient(180deg,
+                  rgba(200,48,122,0.0) 0%,
+                  rgba(200,48,122,0.45) 12%,
+                  rgba(200,48,122,0.45) 88%,
+                  rgba(200,48,122,0.0) 100%);
+      transform: translateX(-50%);
+    }
+    /* First/last row in a day clip the rail so it doesn't bleed out. */
+    .tl-day + .tl-row .tl-row__rail::before { top: 6px; }
+    .tl-row__dot {
+      position: relative;
+      margin-top: 22px;
+      width: 14px; height: 14px;
+      border-radius: 9999px;
+      background: var(--paper);
+      box-shadow: inset 0 0 0 2px var(--brand);
+      flex-shrink: 0;
+    }
+    .tl-row[data-key="ceremony"] .tl-row__dot {
+      width: 18px; height: 18px;
+      margin-top: 20px;
+      background: var(--brand-deep);
+      box-shadow: inset 0 0 0 2px var(--brand-deep),
+                  0 0 0 4px rgba(200,48,122,0.18);
+    }
+    .tl-row--pick .tl-row__dot {
+      width: 18px; height: 18px;
+      margin-top: 20px;
+      background: var(--brand-darker);
+      box-shadow: inset 0 0 0 2px var(--brand-darker),
+                  0 0 0 4px rgba(255,126,182,0.32);
+    }
+    /* Use a small sparkle inside the pick dot. Drawn via background SVG
+       so the dot stays a clean circle visually. */
+    .tl-row--pick .tl-row__dot::after {
+      content: "✦";
+      position: absolute;
+      inset: 0;
+      display: grid; place-items: center;
+      color: var(--brand-pale);
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    /* Fixed wedding event card */
+    .tl-event {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 14px 18px 14px 18px;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .tl-event:hover { border-color: rgba(200,48,122,0.30); }
+    .tl-event__title {
+      font-family: var(--serif);
+      font-size: 17px; line-height: 1.2;
+      color: var(--ink);
+      margin: 0 0 4px;
+      font-weight: 500;
+    }
+    .tl-event__sub {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+    /* The ceremony tile gets a subtle magenta left bar + slightly heavier card */
+    .tl-row[data-key="ceremony"] .tl-event {
+      border-color: rgba(200,48,122,0.45);
+      background: linear-gradient(135deg, var(--paper) 0%, var(--paper-warm) 100%);
+      box-shadow: 0 4px 12px -8px rgba(200,48,122,0.35);
+      border-left: 3px solid var(--brand-deep);
+      padding-left: 16px;
+    }
+    .tl-row[data-key="ceremony"] .tl-event__title {
+      font-size: 19px;
+    }
+    .tl-row[data-key="ceremony"] .tl-event__title::before {
+      content: "✿";
+      color: var(--brand-deep);
+      margin-right: 7px;
+      font-size: 14px;
+      vertical-align: 1px;
+    }
+
+    /* Allie pick card — the upsell */
+    .tl-pick {
+      display: grid;
+      grid-template-columns: 1fr;
+      background:
+        linear-gradient(135deg, var(--paper) 0%, var(--paper-warm) 100%);
+      border: 1px solid rgba(200,48,122,0.30);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px -16px rgba(95,17,56,0.30);
+      transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 240ms ease, border-color 240ms ease;
+    }
+    @media (min-width: 640px) {
+      .tl-pick { grid-template-columns: 168px 1fr; }
+    }
+    .tl-pick:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200,48,122,0.55);
+      box-shadow: 0 16px 32px -18px rgba(95,17,56,0.35);
+    }
+    .tl-pick__photo {
+      position: relative;
+      min-height: 120px;
+      background-size: cover; background-position: center;
+    }
+    .tl-pick__photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+                  rgba(26,26,26,0.0) 0%,
+                  rgba(26,26,26,0.35) 100%);
+    }
+    .tl-pick__body {
+      padding: 16px 20px 18px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .tl-pick__head {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    }
+    .tl-pick__badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--brand-darker);
+      color: var(--brand-glow);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .tl-pick__badge svg { width: 12px; height: 12px; }
+    .tl-pick__save {
+      display: inline-flex; align-items: center;
+      padding: 3px 9px;
+      background: rgba(200,48,122,0.15);
+      color: var(--brand-deep);
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .tl-pick__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+    .tl-pick__why {
+      position: relative;
+      margin: 4px 0 2px;
+      padding: 8px 10px 8px 14px;
+      background: rgba(200,48,122,0.07);
+      border-left: 2px solid var(--brand);
+      border-radius: 4px;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .tl-pick__why strong {
+      display: block;
+      font-style: normal; font-weight: 700;
+      font-size: 9.5px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand-deep);
+      margin-bottom: 2px;
+    }
+    .tl-pick__desc {
+      font-size: 12.5px; line-height: 1.55;
+      color: var(--ink-muted);
+      margin: 0;
+    }
+    .tl-pick__bullets {
+      list-style: none; padding: 0; margin: 2px 0 0;
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .tl-pick__bullets li {
+      font-size: 11.5px; color: var(--ink-muted);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tl-pick__bullets li::before {
+      content: "";
+      width: 4px; height: 4px;
+      border-radius: 9999px;
+      background: var(--brand);
+    }
+    .tl-pick__foot {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      margin-top: 8px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(200,48,122,0.25);
+    }
+    .tl-pick__price {
+      display: flex; flex-direction: column; gap: 2px;
+      font-size: 10.5px; letter-spacing: 0.06em;
+      color: var(--ink-faint);
+    }
+    .tl-pick__price-row {
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .tl-pick__price-row s {
+      color: var(--ink-faint); font-size: 13px; font-weight: 500;
+    }
+    .tl-pick__price-row strong {
+      font-family: var(--serif);
+      font-size: 26px; line-height: 1;
+      color: var(--brand-deep);
+      letter-spacing: -0.4px;
+      font-weight: 500;
+    }
+    .tl-pick__price-row em {
+      font-style: normal; font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 400;
+    }
+    .tl-pick__cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 18px;
+      background: var(--brand);
+      color: #fff;
+      border: 0; border-radius: 9999px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: background-color 180ms ease, transform 180ms ease;
+      flex-shrink: 0;
+    }
+    .tl-pick__cta:hover { background: var(--brand-deep); transform: translateY(-1px); }
+    .tl-pick--added {
+      border-color: rgba(200,48,122,0.55);
+      background: linear-gradient(135deg, var(--paper) 0%, rgba(255,126,182,0.20) 100%);
+    }
+    .tl-pick--added .tl-pick__cta {
+      background: var(--brand-deep);
+      pointer-events: none;
+    }
+    .tl-pick--added .tl-pick__cta::before {
+      content: "✓";
+      margin-right: 4px;
+    }
+
+    @media (max-width: 540px) {
+      .tl-row__time { font-size: 12.5px; padding-top: 16px; }
+      .tl-pick__title { font-size: 19px; }
+      .tl-pick__price-row strong { font-size: 22px; }
+    }
+
+    /* ============================================================
+       Allie concierge callout (Schedule timeline, top)
+       — Dark ink + magenta-glow card pinned above the day banners.
+       Reads as Allie's broadcast offer (vs. tl-pick which is a
+       per-time-slot upsell). One-click to book/unbook transportation.
+       ============================================================ */
+    .tl-callout {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 20px 22px;
+      margin: 0 0 22px;
+      background:
+        radial-gradient(420px 200px at 100% 0%, rgba(255,126,182,0.22), transparent 60%),
+        linear-gradient(135deg, #1a1a1a 0%, #2b1820 100%);
+      color: #fbf3ec;
+      border: 1px solid rgba(255,126,182,0.30);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tl-callout::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--brand-glow) 0%, var(--coral) 100%);
+    }
+    .tl-callout__avatar {
+      width: 44px; height: 44px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+      display: grid; place-items: center;
+      color: #fff;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(255,126,182,0.18);
+    }
+    .tl-callout__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .tl-callout__eyebrow {
+      font-size: 9.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brand-glow);
+      font-weight: 700;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tl-callout__eyebrow svg { width: 12px; height: 12px; }
+    .tl-callout__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.15;
+      margin: 4px 0 0;
+      color: #fff;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+    .tl-callout__sub {
+      margin: 6px 0 0;
+      font-size: 12.5px; line-height: 1.55;
+      color: rgba(251,243,236,0.78);
+      max-width: 60ch;
+    }
+    .tl-callout__meta {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .tl-callout__chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px;
+      background: rgba(255,126,182,0.18);
+      color: var(--brand-glow);
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .tl-callout__price {
+      font-family: var(--serif);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .tl-callout__price em {
+      font-style: normal;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: rgba(251,243,236,0.6);
+      margin-left: 6px;
+    }
+    .tl-callout__cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 20px;
+      background: var(--brand);
+      color: #fff;
+      border: 0;
+      border-radius: 9999px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      white-space: nowrap;
+      transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+      flex-shrink: 0;
+      box-shadow: 0 10px 22px -14px rgba(255,126,182,0.55);
+    }
+    .tl-callout__cta:hover {
+      background: var(--brand-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px -14px rgba(255,126,182,0.65);
+    }
+    .tl-callout--booked { border-color: rgba(255,126,182,0.55); }
+    .tl-callout--booked .tl-callout__cta { background: var(--brand-deep); }
+    .tl-callout--booked .tl-callout__cta::before {
+      content: "✓";
+      margin-right: 4px;
+      font-size: 13px;
+    }
+    @media (max-width: 640px) {
+      .tl-callout {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+      .tl-callout__avatar { display: none; }
+      .tl-callout__cta { justify-self: stretch; justify-content: center; }
+    }
+
+    /* ============================================================
+       Cards: Room block / Spa / Excursions
+       ============================================================ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (min-width: 720px) {
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1040px) {
+      .card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 220ms ease, border-color 220ms ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200,48,122,0.30);
+      box-shadow: var(--shadow);
+    }
+    .card__photo {
+      aspect-ratio: 16 / 9;
+      background-size: cover; background-position: center;
+      position: relative;
+    }
+    .card__photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.45) 100%);
+    }
+    .card__pricetag {
+      position: absolute; right: 12px; top: 12px;
+      padding: 7px 11px 8px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      color: var(--ink);
+      box-shadow: 0 8px 16px -10px rgba(26,26,26,0.35);
+      display: flex; flex-direction: column; align-items: flex-end; gap: 1px;
+      line-height: 1.1;
+    }
+    .card__pricetag__label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--brand-deep);
+    }
+    .card__pricetag__row {
+      display: inline-flex; align-items: baseline; gap: 5px;
+      font-size: 11px;
+      font-feature-settings: "tnum" 1;
+    }
+    .card__pricetag__row s {
+      color: var(--ink-faint);
+      font-weight: 500;
+    }
+    .card__pricetag__row strong {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .card__pricetag__row span {
+      font-size: 10px; font-weight: 600;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+    }
+    /* Legacy single-line pricetag (for the "Most booked" badge) keeps the
+       old simple styling so its left-positioned override still reads well. */
+    .card__pricetag--solid {
+      display: inline-block;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .card__body {
+      padding: 18px 20px 20px;
+      display: flex; flex-direction: column; gap: 8px; flex: 1;
+    }
+    .card__eyebrow {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--brand-deep);
+    }
+    .card__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0;
+      font-weight: 500;
+    }
+    .card__loc {
+      font-size: 12px; color: var(--ink-muted);
+      letter-spacing: 0.02em;
+      margin: -2px 0 4px;
+    }
+    .card__desc {
+      font-size: 13px; line-height: 1.55;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .card__bullets {
+      list-style: none; padding: 0; margin: 4px 0 0;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .card__bullets li {
+      font-size: 12px; color: var(--ink-muted);
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .card__bullets li::before {
+      content: ""; flex: 0 0 4px;
+      width: 4px; height: 4px;
+      border-radius: 9999px;
+      background: var(--brand);
+      align-self: center;
+    }
+    .card__foot {
+      margin-top: auto;
+      padding: 14px 20px;
+      background: var(--paper-warm);
+      border-top: 1px solid var(--rule-soft);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .card__price {
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 11px; color: var(--ink-faint); letter-spacing: 0.04em;
+    }
+    .card__price__label {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--brand-deep);
+    }
+    .card__price__label .card__price__off {
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+    }
+    .card__price__row {
+      display: inline-flex; align-items: baseline; gap: 8px;
+      font-feature-settings: "tnum" 1;
+    }
+    .card__price__row s {
+      color: var(--ink-faint);
+      font-weight: 500;
+      font-size: 13px;
+    }
+    .card__price__row strong {
+      font-family: var(--serif);
+      font-size: 24px; font-weight: 500;
+      color: var(--brand-deep);
+      line-height: 1;
+      letter-spacing: -0.3px;
+    }
+    .card__price__meta {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+    .card__price__meta strong {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--brand-deep);
+      letter-spacing: 0.04em;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px;
+      border: 0; border-radius: 9999px;
+      background: var(--ink); color: #fff;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      transition: background-color 200ms ease, transform 200ms ease;
+    }
+    .btn:hover { background: var(--ink-soft); transform: translateY(-1px); }
+    .btn--copper { background: var(--brand); }
+    .btn--copper:hover { background: var(--brand-deep); }
+    .btn--ghost {
+      background: var(--paper);
+      color: var(--ink);
+      border: 1px solid var(--rule);
+    }
+    .btn--ghost:hover { background: var(--paper-warm); }
+    .btn--block { width: 100%; justify-content: center; }
+    .btn--added {
+      background: var(--brand-deep);
+      pointer-events: none;
+    }
+    .btn--added::before {
+      content: "✓";
+      margin-right: 4px;
+    }
+
+    /* ============================================================
+       Stay (room block) screen
+       ============================================================ */
+    .stay-form {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin: 18px 0 6px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 640px) {
+      .stay-form { grid-template-columns: repeat(3, 1fr); }
+    }
+    .field {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .field label {
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .field input, .field select {
+      font: inherit; font-size: 14px;
+      padding: 11px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      background: var(--paper-warm);
+      color: var(--ink);
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .field input:focus-visible, .field select:focus-visible {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(200,48,122,0.18);
+      background: var(--paper);
+    }
+    .stay-banner {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 22px;
+      background: linear-gradient(135deg, rgba(200,48,122,0.12) 0%, rgba(200,48,122,0.10) 100%);
+      border: 1px solid rgba(200,48,122,0.25);
+      border-radius: 14px;
+      margin-top: 18px;
+    }
+    .stay-banner__icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--brand); color: #fff;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .stay-banner__title {
+      font-family: var(--serif);
+      font-size: 18px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0;
+    }
+    .stay-banner__sub {
+      font-size: 12px; color: var(--ink-muted);
+      margin: 2px 0 0;
+    }
+    .stay-banner__code {
+      margin-left: auto;
+      padding: 8px 12px;
+      background: var(--paper);
+      border: 1px dashed var(--brand);
+      border-radius: 8px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 13px; font-weight: 600; color: var(--brand-deep);
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================================================
+       Extend-stay promo banner (Schedule page)
+       — Magenta-tinted CTA box that sits above the itinerary timeline
+       and invites guests to add an extra night at 10% off block rate.
+       ============================================================ */
+    .extend-banner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 22px;
+      margin: 0 22px 18px;
+      background:
+        radial-gradient(420px 180px at 100% 0%, rgba(255,126,182,0.22), transparent 65%),
+        linear-gradient(135deg, rgba(200,48,122,0.14) 0%, rgba(231,111,81,0.10) 100%);
+      border: 1px solid rgba(200,48,122,0.30);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .extend-banner::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--brand) 0%, var(--coral) 100%);
+    }
+    .extend-banner__chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .extend-banner__body { min-width: 0; }
+    .extend-banner__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.15;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.2px;
+    }
+    .extend-banner__title em {
+      font-style: italic;
+      color: var(--brand-deep);
+    }
+    .extend-banner__sub {
+      margin: 6px 0 0;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-soft);
+      max-width: 56ch;
+    }
+    .extend-banner__cta {
+      align-self: center;
+      white-space: nowrap;
+      padding: 11px 18px;
+      font-size: 12.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: var(--brand);
+      color: #fff;
+      border: 0;
+      border-radius: 9999px;
+      box-shadow: 0 6px 16px -10px rgba(200,48,122,0.55);
+      transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+    }
+    .extend-banner__cta:hover {
+      background: var(--brand-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px -12px rgba(200,48,122,0.65);
+    }
+    .extend-banner__cta[disabled] {
+      background: var(--ink-faint);
+      color: var(--paper);
+      cursor: default;
+      box-shadow: none;
+    }
+    @media (max-width: 640px) {
+      .extend-banner {
+        grid-template-columns: 1fr;
+      }
+      .extend-banner__cta { justify-self: stretch; text-align: center; }
+    }
+
+    /* ============================================================
+       Recovery-bundle banner (Schedule page, below timeline)
+       — Coral / sunset variant of the extend banner. Bundles +1
+       hotel night and a 20%-off massage as a single one-click
+       "recover post-wedding" offer.
+       ============================================================ */
+    .recovery-banner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 22px;
+      margin: 18px 22px 4px;
+      background:
+        radial-gradient(420px 200px at 100% 0%, rgba(231,111,81,0.22), transparent 60%),
+        linear-gradient(135deg, rgba(231,111,81,0.14) 0%, rgba(200,48,122,0.10) 100%);
+      border: 1px solid rgba(231,111,81,0.32);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .recovery-banner::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--coral) 0%, var(--brand) 100%);
+    }
+    .recovery-banner__chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      background: var(--coral);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .recovery-banner__body { min-width: 0; }
+    .recovery-banner__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.15;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.2px;
+    }
+    .recovery-banner__title em {
+      font-style: italic;
+      color: var(--coral);
+    }
+    .recovery-banner__sub {
+      margin: 6px 0 0;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-soft);
+      max-width: 60ch;
+    }
+    .recovery-banner__bullets {
+      list-style: none; padding: 0;
+      margin: 10px 0 0;
+      display: flex; flex-wrap: wrap; gap: 14px;
+      font-size: 11.5px; color: var(--ink-soft);
+    }
+    .recovery-banner__bullets li {
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .recovery-banner__bullets li::before {
+      content: "";
+      width: 5px; height: 5px;
+      border-radius: 9999px;
+      background: var(--coral);
+    }
+    .recovery-banner__cta {
+      align-self: center;
+      white-space: nowrap;
+      padding: 11px 18px;
+      font-size: 12.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: var(--coral);
+      color: #fff;
+      border: 0;
+      border-radius: 9999px;
+      box-shadow: 0 6px 16px -10px rgba(231,111,81,0.55);
+      transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+    }
+    .recovery-banner__cta:hover {
+      background: #c8532d;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px -12px rgba(231,111,81,0.65);
+    }
+    .recovery-banner--booked { border-color: rgba(231,111,81,0.65); }
+    .recovery-banner--booked .recovery-banner__cta { background: #9c3a1c; }
+    .recovery-banner--booked .recovery-banner__cta::before {
+      content: "✓";
+      margin-right: 4px;
+    }
+    @media (max-width: 640px) {
+      .recovery-banner {
+        grid-template-columns: 1fr;
+      }
+      .recovery-banner__cta { justify-self: stretch; text-align: center; }
+    }
+
+    /* ============================================================
+       Registry — gift the couple
+       — Top progress banner shows how many experiences have been
+       claimed and how full the shared honeymoon fund is. Cards
+       below reuse .card / .card-grid; gifted experiences get a
+       desaturated photo + "Already gifted" pricetag. The
+       honeymoon-fund card is unique: it carries a progress bar
+       and a contribution input row that lets the guest type in
+       any amount (with quick-pick chips for common values).
+       ============================================================ */
+    .registry-banner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px 22px;
+      margin: 0 22px 18px;
+      background:
+        radial-gradient(440px 220px at 100% 0%, rgba(200,48,122,0.20), transparent 60%),
+        linear-gradient(135deg, rgba(200,48,122,0.10) 0%, rgba(231,111,81,0.10) 100%);
+      border: 1px solid rgba(200,48,122,0.28);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .registry-banner::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--brand) 0%, var(--coral) 100%);
+    }
+    .registry-banner__chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .registry-banner__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.15;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.2px;
+      font-weight: 500;
+    }
+    .registry-banner__title em {
+      font-style: italic;
+      color: var(--brand-deep);
+    }
+    .registry-banner__sub {
+      margin: 6px 0 0;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-soft);
+      max-width: 64ch;
+    }
+    .registry-banner__progress {
+      position: relative;
+      height: 8px;
+      background: rgba(28,28,28,0.08);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 4px;
+      max-width: 480px;
+    }
+    .registry-banner__progress > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--coral) 100%);
+      border-radius: 9999px;
+      transition: width 320ms ease;
+    }
+    .registry-banner__meta {
+      margin: 2px 0 0;
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      letter-spacing: 0.01em;
+    }
+    .registry-banner__meta strong { color: var(--ink); font-weight: 600; }
+
+    /* Card variants — gifted / your-gift state */
+    .card--gifted .card__photo {
+      filter: saturate(0.65) brightness(0.88);
+    }
+    .card--gifted .card__title,
+    .card--gifted .card__desc {
+      color: var(--ink-muted);
+    }
+    .card--yours {
+      border-color: rgba(200,48,122,0.45);
+      box-shadow: 0 0 0 1px rgba(200,48,122,0.12), 0 14px 32px -22px rgba(200,48,122,0.45);
+    }
+
+    /* Honeymoon-fund progress bar inside the fund card */
+    .fund-bar {
+      position: relative;
+      width: 100%;
+      height: 7px;
+      background: rgba(28,28,28,0.08);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 4px 0 2px;
+    }
+    .fund-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--coral) 100%);
+      transition: width 320ms ease;
+    }
+    .fund-meta {
+      display: flex; justify-content: space-between;
+      font-size: 11.5px; color: var(--ink-soft);
+      margin: 10px 0 2px;
+      letter-spacing: 0.01em;
+    }
+    .fund-meta strong { color: var(--brand-deep); font-weight: 600; }
+
+    .contribute-row {
+      display: flex; gap: 10px; align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .contribute-row .amount-label {
+      font-size: 11px; color: var(--ink-soft);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 600;
+    }
+    .amount-input {
+      position: relative;
+      display: inline-flex;
+    }
+    .amount-input input {
+      width: 108px;
+      padding: 9px 12px 9px 24px;
+      border: 1px solid rgba(28,28,28,0.14);
+      border-radius: 9px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      background: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    .amount-input input:focus {
+      outline: 0;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(200,48,122,0.16);
+    }
+    .amount-input::before {
+      content: "$";
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px; color: var(--ink-soft);
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .contribute-row .quick {
+      display: flex; gap: 5px; flex-wrap: wrap;
+    }
+    .contribute-row .quick button {
+      appearance: none; -webkit-appearance: none;
+      background: transparent;
+      border: 1px solid rgba(28,28,28,0.14);
+      padding: 6px 11px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border-radius: 9999px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+      font-variant-numeric: tabular-nums;
+    }
+    .contribute-row .quick button:hover {
+      border-color: var(--brand);
+      color: var(--brand-deep);
+      background: var(--brand-bg);
+    }
+    @media (max-width: 640px) {
+      .registry-banner { margin: 0 16px 14px; padding: 16px 18px; }
+      .amount-input input { width: 100%; min-width: 0; }
+      .contribute-row { width: 100%; }
+      .contribute-row > label { flex: 1 1 100%; }
+    }
+
+    /* ============================================================
+       Profile screen — guest account view
+       — Hero card with avatar / name / email / RSVP, followed by
+       the referral program panel and a compact itinerary recap.
+       ============================================================ */
+    .profile-hero {
+      display: grid;
+      grid-template-columns: 88px 1fr auto;
+      gap: 22px;
+      align-items: center;
+      padding: 24px 24px;
+      margin: 0 22px 20px;
+      background: var(--paper);
+      border: 1px solid var(--rule-soft);
+      border-radius: 18px;
+      box-shadow: 0 14px 32px -24px rgba(28,28,28,0.18);
+    }
+    .profile-hero__avatar {
+      width: 88px; height: 88px; border-radius: 9999px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-darker) 100%);
+      color: #fff;
+      display: grid; place-items: center;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 32px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 0 4px rgba(200,48,122,0.14);
+    }
+    .profile-hero__body { min-width: 0; }
+    .profile-hero__name {
+      font-family: var(--serif);
+      font-size: 28px; line-height: 1.05;
+      color: var(--ink);
+      margin: 0 0 4px;
+      letter-spacing: -0.3px;
+      font-weight: 500;
+    }
+    .profile-hero__email {
+      font-size: 12.5px; color: var(--ink-soft);
+      margin: 0 0 12px;
+    }
+    .profile-hero__pills {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .profile-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: var(--paper-warm);
+      color: var(--ink-soft);
+      border: 1px solid var(--rule-soft);
+    }
+    .profile-pill--brand {
+      background: var(--brand-bg);
+      color: var(--brand-deep);
+      border-color: rgba(200,48,122,0.32);
+    }
+    .profile-pill--coral {
+      background: rgba(231,111,81,0.12);
+      color: #b85537;
+      border-color: rgba(231,111,81,0.34);
+    }
+    .profile-hero__signout {
+      align-self: flex-start;
+      padding: 9px 14px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: color 120ms ease, border-color 120ms ease;
+    }
+    .profile-hero__signout:hover { color: var(--brand-deep); border-color: var(--brand-deep); }
+
+    @media (max-width: 640px) {
+      .profile-hero {
+        grid-template-columns: 64px 1fr;
+        gap: 16px;
+        padding: 18px;
+        margin: 0 16px 16px;
+      }
+      .profile-hero__avatar { width: 64px; height: 64px; font-size: 24px; }
+      .profile-hero__signout { grid-column: 1 / -1; justify-self: start; }
+    }
+
+    /* ============================================================
+       Referral hero — the star of the profile screen
+       — Magenta-glow card with a clear reward, the guest's
+       deterministic referral code + link, share affordances,
+       a small invite-by-email form, and a list of friends with
+       per-friend status (pending vs booked).
+       ============================================================ */
+    .referral-card {
+      position: relative;
+      margin: 0 22px 22px;
+      padding: 24px 24px 22px;
+      background:
+        radial-gradient(520px 280px at 0% 0%, rgba(200,48,122,0.22), transparent 60%),
+        radial-gradient(420px 240px at 100% 100%, rgba(231,111,81,0.18), transparent 60%),
+        linear-gradient(160deg, var(--brand-darker) 0%, #2b1a1f 100%);
+      color: #fbeef3;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px -28px rgba(95,17,56,0.55);
+    }
+    .referral-card__eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 11px;
+      background: rgba(255,126,182,0.22);
+      color: var(--brand-glow);
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .referral-card__eyebrow svg { width: 12px; height: 12px; }
+    .referral-card__title {
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 34px);
+      line-height: 1.08;
+      letter-spacing: -0.4px;
+      color: #fff;
+      margin: 0 0 6px;
+      font-weight: 500;
+    }
+    .referral-card__title em {
+      font-style: italic;
+      color: var(--brand-glow);
+    }
+    .referral-card__sub {
+      font-size: 13.5px; line-height: 1.55;
+      color: rgba(251,238,243,0.78);
+      margin: 0 0 18px;
+      max-width: 60ch;
+    }
+    .referral-card__grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 760px) {
+      .referral-card__grid { grid-template-columns: 1fr; }
+    }
+
+    /* Reward strip — "1 friend books → free voucher" visual */
+    .reward-strip {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,126,182,0.22);
+      border-radius: 14px;
+      backdrop-filter: blur(2px);
+    }
+    .reward-strip__icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--coral) 100%);
+      color: #fff;
+      display: grid; place-items: center;
+      box-shadow: 0 8px 20px -10px rgba(200,48,122,0.65);
+    }
+    .reward-strip__icon svg { width: 22px; height: 22px; }
+    .reward-strip__label {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--brand-glow);
+      margin: 0 0 2px;
+    }
+    .reward-strip__title {
+      font-family: var(--serif);
+      font-size: 18px; line-height: 1.2;
+      color: #fff;
+      margin: 0 0 4px;
+      font-weight: 500;
+    }
+    .reward-strip__value {
+      font-size: 11.5px;
+      color: rgba(251,238,243,0.72);
+      font-variant-numeric: tabular-nums;
+    }
+    .reward-strip__value strong { color: var(--brand-glow); font-weight: 700; }
+
+    .reward-progress {
+      margin-top: 12px;
+    }
+    .reward-progress__meta {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 11.5px;
+      color: rgba(251,238,243,0.7);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .reward-progress__meta strong { color: #fff; font-weight: 700; }
+    .reward-progress__bar {
+      position: relative;
+      height: 6px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .reward-progress__bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-glow) 0%, var(--coral) 100%);
+      border-radius: 9999px;
+      transition: width 320ms ease;
+    }
+
+    /* Code + link blocks */
+    .share-stack {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .share-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+    }
+    .share-row__label {
+      grid-column: 1 / -1;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--brand-glow);
+      margin-bottom: -2px;
+    }
+    .share-row__value {
+      font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+      font-size: 13px;
+      color: #fff;
+      letter-spacing: 0.02em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .share-row__copy {
+      padding: 8px 12px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--brand-glow);
+      color: var(--brand-darker);
+      border: 0;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 120ms ease, transform 120ms ease;
+      white-space: nowrap;
+    }
+    .share-row__copy:hover { background: #ffb1d2; transform: translateY(-1px); }
+    .share-row__copy[data-copied="true"] {
+      background: var(--coral);
+      color: #fff;
+    }
+
+    .share-buttons {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .share-buttons a, .share-buttons button {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 14px;
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.04em;
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 9999px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 120ms ease, transform 120ms ease;
+    }
+    .share-buttons a:hover, .share-buttons button:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-1px);
+    }
+    .share-buttons svg { width: 13px; height: 13px; }
+
+    /* Invite form */
+    .invite-form {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+    }
+    .invite-form__title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--brand-glow);
+      margin: 0 0 10px;
+    }
+    .invite-form__row {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr auto;
+      gap: 8px;
+    }
+    @media (max-width: 640px) {
+      .invite-form__row { grid-template-columns: 1fr; }
+    }
+    .invite-form input {
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 9px;
+      font: inherit;
+      font-size: 13px;
+    }
+    .invite-form input::placeholder { color: rgba(251,238,243,0.45); }
+    .invite-form input:focus {
+      outline: 0;
+      border-color: var(--brand-glow);
+      box-shadow: 0 0 0 3px rgba(255,126,182,0.20);
+    }
+    .invite-form button[type="submit"] {
+      padding: 10px 18px;
+      font-size: 11.5px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--brand-glow);
+      color: var(--brand-darker);
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 120ms ease, transform 120ms ease;
+    }
+    .invite-form button[type="submit"]:hover { background: #ffb1d2; transform: translateY(-1px); }
+
+    /* Friend list */
+    .friend-list {
+      list-style: none; padding: 0; margin: 18px 0 0;
+      display: flex; flex-direction: column;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .friend-row {
+      display: grid;
+      grid-template-columns: 36px 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .friend-row:last-child { border-bottom: 0; }
+    .friend-row__avatar {
+      width: 36px; height: 36px; border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(255,126,182,0.30) 0%, rgba(231,111,81,0.30) 100%);
+      color: #fff;
+      display: grid; place-items: center;
+      font-family: var(--serif);
+      font-size: 14px;
+    }
+    .friend-row__body { min-width: 0; }
+    .friend-row__name {
+      font-size: 13.5px; color: #fff; font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .friend-row__email {
+      font-size: 11px; color: rgba(251,238,243,0.55);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .friend-pill {
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .friend-pill--invited {
+      background: rgba(255,255,255,0.10);
+      color: rgba(251,238,243,0.75);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    .friend-pill--booked {
+      background: var(--brand-glow);
+      color: var(--brand-darker);
+      border: 1px solid var(--brand-glow);
+    }
+    .friend-row__action {
+      background: transparent;
+      border: 0;
+      color: var(--brand-glow);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .friend-row__action:hover { color: #fff; }
+    @media (max-width: 640px) {
+      .friend-row {
+        grid-template-columns: 36px 1fr auto;
+      }
+      .friend-row__action { grid-column: 2 / -1; justify-self: end; padding: 0; }
+    }
+
+    /* Compact itinerary recap card on profile */
+    .recap {
+      margin: 0 22px 22px;
+      padding: 20px 22px;
+      background: var(--paper);
+      border: 1px solid var(--rule-soft);
+      border-radius: 16px;
+    }
+    .recap__head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .recap__title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0;
+      font-weight: 500;
+    }
+    .recap__cta {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--brand-deep);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+    .recap__cta:hover { color: var(--brand-darker); }
+    .recap__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .recap__cell {
+      padding: 12px 14px;
+      background: var(--paper-warm);
+      border-radius: 12px;
+      border: 1px solid var(--rule-soft);
+    }
+    .recap__cell-lbl {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-muted);
+      margin: 0 0 4px;
+    }
+    .recap__cell-val {
+      font-family: var(--serif);
+      font-size: 18px; line-height: 1.1;
+      color: var(--ink);
+      margin: 0;
+    }
+    .recap__cell-val em { font-style: italic; color: var(--brand-deep); }
+    @media (max-width: 640px) {
+      .referral-card { margin: 0 16px 18px; padding: 20px 18px; }
+      .profile-hero, .recap { margin: 0 16px 16px; }
+    }
+
+    /* Cart drawer — perk lines (negative or zero priced) get a
+       distinct treatment so the discount stands out. */
+    .cart__line--perk .cart__line-price {
+      color: #2d8a47;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       Itinerary drawer (sticky bottom)
+       ============================================================ */
+    .cart {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      width: min(960px, calc(100% - 32px));
+      background: var(--ink);
+      color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 24px 60px -24px rgba(0,0,0,0.45);
+      z-index: 40;
+      transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 280ms ease;
+    }
+    .cart[data-empty="true"] {
+      transform: translateX(-50%) translateY(140%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .cart__head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 20px;
+      cursor: pointer;
+    }
+    .cart__icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--brand);
+      display: grid; place-items: center; color: #fff;
+      flex-shrink: 0;
+    }
+    .cart__title {
+      font-family: var(--serif);
+      font-size: 18px; line-height: 1.1;
+      color: #fff;
+      margin: 0;
+    }
+    .cart__sub {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.04em;
+      margin: 2px 0 0;
+    }
+    .cart__total {
+      margin-left: auto;
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 0;
+    }
+    .cart__total-lbl {
+      font-size: 9.5px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .cart__total-val {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1;
+      color: var(--brand-pale);
+      font-weight: 500;
+    }
+    .cart__chev {
+      color: rgba(255,255,255,0.55);
+      transition: transform 220ms ease;
+    }
+    .cart[data-open="true"] .cart__chev {
+      transform: rotate(180deg);
+    }
+    .cart__body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .cart[data-open="true"] .cart__body {
+      max-height: 540px;
+    }
+    .cart__list {
+      list-style: none; padding: 0; margin: 0;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .cart__line {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px; align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px;
+    }
+    .cart__line:last-child { border-bottom: 0; }
+    .cart__line strong {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 15px;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .cart__line em {
+      font-style: normal;
+      color: rgba(255,255,255,0.65);
+      font-size: 11.5px;
+    }
+    .cart__line-price {
+      font-variant-numeric: tabular-nums;
+      color: var(--brand-pale);
+      font-weight: 600;
+    }
+    .cart__remove {
+      background: none; border: 0;
+      color: rgba(255,255,255,0.55);
+      font-size: 18px;
+      padding: 0; line-height: 1;
+    }
+    .cart__remove:hover { color: var(--brand-pale); }
+    .cart__foot {
+      padding: 14px 20px 16px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+      display: flex; gap: 10px; align-items: center;
+    }
+    .cart__msg {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.65);
+      flex: 1;
+    }
+    .cart__checkout {
+      padding: 11px 18px;
+      background: var(--brand);
+      color: #fff;
+      border: 0; border-radius: 9999px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .cart__checkout:hover { background: var(--brand-deep); }
+
+    /* ============================================================
+       Toast
+       ============================================================ */
+    .toast {
+      position: fixed; top: 76px; right: 18px;
+      padding: 12px 16px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 13px;
+      box-shadow: 0 14px 32px -12px rgba(0,0,0,0.4);
+      z-index: 60;
+      transform: translateX(120%);
+      transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast[data-show="true"] {
+      transform: translateX(0);
+    }
+    .toast__check {
+      width: 22px; height: 22px;
+      border-radius: 9999px;
+      background: var(--brand-deep);
+      display: grid; place-items: center;
+      font-size: 12px;
+    }
+
+    /* ============================================================
+       RSVP / Schedule sub-section
+       ============================================================ */
+    .rsvp {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      padding: 24px 26px;
+      margin-top: 18px;
+    }
+    .rsvp__row {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 14px;
+    }
+    .pill {
+      padding: 10px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink-soft);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .pill[data-selected="true"] {
+      background: var(--ink); color: #fff;
+      border-color: var(--ink);
+    }
+    .pill--copper[data-selected="true"] {
+      background: var(--brand); color: #fff;
+      border-color: var(--brand);
+    }
+    .pill--sage[data-selected="true"] {
+      background: var(--brand-deep); color: #fff;
+      border-color: var(--brand-deep);
+    }
+
+    /* ============================================================
+       Email preview (pre-login)
+       — Simulated inbox view: the guest opens an email from Allie
+       inviting them to the portal. Clicking the CTA flips
+       state.emailClicked and routes onward to the sign-in screen.
+       ============================================================ */
+    .email-page {
+      min-height: 100vh;
+      background: var(--canvas);
+      padding: 32px 22px 60px;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+    .email-page__chrome {
+      width: 100%;
+      max-width: 640px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4px 18px;
+      color: var(--ink-muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .email-page__brand {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+    .email-page__brand-mark {
+      display: grid; place-items: center;
+      width: 22px; height: 22px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, var(--brand-darker) 0%, var(--brand-deep) 100%);
+      color: #fff;
+    }
+    .email-page__time { font-variant-numeric: tabular-nums; }
+
+    .mail {
+      width: 100%;
+      max-width: 640px;
+      background: var(--paper);
+      border-radius: 14px;
+      border: 1px solid var(--rule);
+      box-shadow: 0 24px 60px -32px rgba(26,26,26,0.30),
+                  0 0 0 1px var(--rule-soft);
+      overflow: hidden;
+      position: relative;
+    }
+    .mail::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--brand) 0%, var(--coral) 100%);
+    }
+    .mail__head {
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 4px 14px;
+    }
+    .mail__avatar {
+      grid-row: 1 / 3;
+      width: 44px; height: 44px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+      color: #fff;
+      display: grid; place-items: center;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      box-shadow: 0 0 0 3px rgba(200,48,122,0.15);
+    }
+    .mail__sender { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .mail__from {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .mail__from span {
+      font-weight: 400;
+      color: var(--ink-faint);
+      margin-left: 4px;
+    }
+    .mail__to {
+      margin: 0;
+      font-size: 11.5px;
+      color: var(--ink-muted);
+    }
+    .mail__to em {
+      font-style: normal;
+      color: var(--ink-faint);
+      margin-left: 4px;
+    }
+    .mail__subject {
+      grid-column: 1 / 3;
+      margin: 8px 0 0;
+      font-family: var(--serif);
+      font-size: 22px;
+      line-height: 1.2;
+      color: var(--ink);
+      letter-spacing: -0.2px;
+      font-weight: 500;
+    }
+    .mail__body {
+      padding: 22px 28px 8px;
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--ink-soft);
+    }
+    .mail__body p { margin: 0 0 14px; }
+    .mail__greeting {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--ink);
+      margin-bottom: 14px !important;
+    }
+    .mail__body strong { color: var(--ink); }
+    .mail__cta-row {
+      display: flex;
+      margin: 22px 0 18px !important;
+    }
+    .mail__cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px;
+      background: var(--brand);
+      color: #fff;
+      border: 0;
+      border-radius: 9999px;
+      font-family: var(--sans);
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 12px 24px -14px rgba(200,48,122,0.55);
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+    .mail__cta:hover {
+      background: var(--brand-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 28px -14px rgba(200,48,122,0.65);
+    }
+    .mail__sig {
+      margin: 18px 0 0 !important;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+    }
+    .mail__sig em {
+      display: block;
+      font-style: italic;
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-top: 2px;
+    }
+    .mail__foot {
+      padding: 14px 28px;
+      background: var(--paper-warm);
+      border-top: 1px solid var(--rule-soft);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-align: center;
+    }
+    .email-page__hint {
+      margin: 22px 0 0;
+      max-width: 640px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-align: center;
+    }
+
+    @media (max-width: 540px) {
+      .email-page { padding: 22px 14px 48px; }
+      .mail__head, .mail__body { padding-left: 20px; padding-right: 20px; }
+      .mail__foot { padding-left: 18px; padding-right: 18px; }
+      .mail__subject { font-size: 19px; }
+      .mail__cta { width: 100%; justify-content: center; }
+    }
+
+    /* Login screen */
+    .login__hero {
+      padding: 36px 28px 8px;
+      max-width: 520px;
+    }
+    .login__eyebrow {
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep); margin: 0 0 12px;
+    }
+    .login__title {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 40px; line-height: 1.05;
+      color: var(--ink); letter-spacing: -0.4px;
+    }
+    .login__title em { font-style: italic; color: var(--brand-deep); }
+    .login__sub {
+      font-size: 14px; line-height: 1.55; color: var(--ink-soft);
+      margin: 0 0 6px;
+    }
+    .login__form {
+      max-width: 460px;
+      padding: 22px 28px 28px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .hero__title { font-size: 30px !important; }
+      .hero__num { font-size: 30px !important; }
+      .stats { grid-template-columns: 1fr 1fr !important; }
+      .actions { grid-template-columns: 1fr !important; }
+      .nav__tab { padding: 10px 10px 12px !important; font-size: 11px !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__title em { animation: none; -webkit-background-clip: initial; background-clip: initial; color: var(--brand-pale); }
+      .hero__eyebrow::before { animation: none; }
+      .action, .card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast__check">✓</span>
+  <span id="toast-msg">Added to your itinerary</span>
+</div>
+
+<!-- App shell -->
+<div class="app" id="app"></div>
+
+<!-- Itinerary drawer (rendered globally) -->
+<aside class="cart" id="cart" data-empty="true" data-open="false" aria-label="Your itinerary">
+  <div class="cart__head" id="cart-head" tabindex="0" role="button" aria-expanded="false">
+    <span class="cart__icon" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M5 8h14l-1.4 12H6.4L5 8z M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </span>
+    <div>
+      <h3 class="cart__title">Your trip itinerary</h3>
+      <p class="cart__sub" id="cart-sub">Tap to expand · 0 items added</p>
+    </div>
+    <span class="cart__total">
+      <span class="cart__total-lbl">Trip total</span>
+      <span class="cart__total-val" id="cart-total">$0</span>
+    </span>
+    <span class="cart__chev" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+  </div>
+  <div class="cart__body" id="cart-body">
+    <ul class="cart__list" id="cart-list"></ul>
+    <div class="cart__foot">
+      <span class="cart__msg">Aria & Marcus's group code is auto-applied. You'll get a confirmation email after submitting.</span>
+      <button type="button" class="cart__checkout" id="cart-checkout">Confirm everything</button>
+    </div>
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   DATA — wedding details + add-on inventory
+   ============================================================ */
+
+/* Wedding date is fixed for the demo. Saturday, March 14, 2026. */
+const WEDDING = {
+  couple:  "Aria & Marcus",
+  hostFirst: "Aria",
+  hostLast:  "Patel",
+  partner: "Marcus Patel",
+  dateISO: "2026-03-14T16:00:00-05:00",
+  dateLong:"Saturday, March 14, 2026",
+  arriveLong: "March 13–15, 2026",
+  venue:   "AVA Resort Cancún",
+  city:    "Cancún, Quintana Roo",
+  hashtag: "#AriaMarcusAtAVA",
+  groupCode: "ARIAMARCUS-AVA-26",
+  ceremonySpace: "Oceanfront Terrace",
+  receptionSpace: "AVA Salon Ballroom",
+  dressCode: "Black-tie optional · beach-formal welcome",
+  weather: "82°F · sunny · Caribbean breeze",
+  heroImg: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1600&q=80",
+};
+
+/* Demo: the guest is already "logged in" as Sofía Vargas — bridesmaid
+   per Aria's existing guest list. They can change name on the login
+   card if they want. */
+const DEFAULT_GUEST = { name: "Sofía Vargas", email: "sofia@vargas.co", party: "Bridesmaid" };
+
+/* Schedule of fixed wedding-weekend events (the parts the bride locked in).
+   Each day uses a stable `day` key so we can splice in Allie's recommended
+   upsells from `ALLIE_PICKS` further down. The ceremony row is flagged so
+   the timeline can render it as the visual anchor of Saturday. */
+const SCHEDULE = [
+  { day: "fri", date: "FRI · MAR 13", title: "Welcome", events: [
+    { time: "5:00 PM", what: "Airport transfers", em: "Complimentary shuttle from CUN · 25 min to the resort" },
+    { time: "7:00 PM", what: "Welcome cocktails — Oceanfront Terrace", em: "Open bar, mezcal flights, passed Yucatecan bites · attire: resort chic" },
+  ]},
+  { day: "sat", date: "SAT · MAR 14", title: "Wedding day", events: [
+    { time: "11:00 AM", what: "Pre-ceremony spa hours", em: "The Spa at AVA open early for the wedding party" },
+    { time: "4:00 PM",  what: "Ceremony — Oceanfront Terrace", em: "Seating opens 3:30 PM · linen aisle, bare feet welcome", key: "ceremony" },
+    { time: "5:30 PM",  what: "Cocktail hour — Sunset Cove", em: "Coral palomas, oceanfront passed bites" },
+    { time: "7:00 PM",  what: "Reception — AVA Salon Ballroom", em: "Long-table dinner, first dance, the Caribbean as backdrop" },
+    { time: "10:30 PM", what: "After-party — Coral Lounge", em: "DJ Mariposa on the decks until 2 AM" },
+  ]},
+  { day: "sun", date: "SUN · MAR 15", title: "Farewell", events: [
+    { time: "10:30 AM", what: "Farewell brunch — Coral Garden", em: "Mezcal mimosas, taquería bar, casual" },
+    { time: "1:00 PM",  what: "Last group photo — Oceanfront Promenade", em: "Optional · plan your departure transfer after" },
+  ]},
+];
+
+/* Room block — block rates vs. published rates, all for 2 nights min */
+const ROOMS = [
+  { id: "rm-king",   name: "Ocean View King",      desc: "Every room at AVA has an ocean view — the wedding-block bestseller, with a private terrace facing the Caribbean.",
+    bullets: ["1 King · sleeps 2", "380 sq ft", "Ocean-view terrace + rainfall shower"],
+    photo: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=900&q=72",
+    blockUSD: 540, listUSD: 745, occ: "2" },
+  { id: "rm-ocean",  name: "Premier Ocean Suite", desc: "Wraparound oceanfront terrace, soaking tub, and the unbroken Caribbean horizon — the view that ends up in everyone's stories.",
+    bullets: ["1 King · sleeps 2", "680 sq ft", "Soaking tub + wraparound terrace"],
+    photo: "https://images.unsplash.com/photo-1566073771259-2a04524b2bcb?auto=format&fit=crop&w=900&q=72", blockUSD: 820, listUSD: 1145, occ: "2", popular: true },
+  { id: "rm-double", name: "Ocean View Double",   desc: "Two queens, terrace facing the sea. Made for two friends sharing — split it and the math gets fun.",
+    bullets: ["2 Queens · sleeps 4", "440 sq ft", "Adjoining option available"],
+    photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=72", blockUSD: 580, listUSD: 825, occ: "4" },
+  { id: "rm-casita", name: "Pool Cabana Suite",   desc: "Walk-out access to the adults-only infinity pool, with a private daybed and outdoor shower — the wedding-party splurge.",
+    bullets: ["1 King · sleeps 2", "780 sq ft", "Direct pool access · private daybed"],
+    photo: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=900&q=72", blockUSD: 1190, listUSD: 1690, occ: "2" },
+  { id: "rm-twosuite", name: "Two-Bedroom Ocean Suite",  desc: "Two-bedroom suite for families coming together. Living room, kitchenette, oversized terrace facing the sea.",
+    bullets: ["2 Bedrooms · sleeps 4–5", "1,180 sq ft", "Living + dining + kitchenette"],
+    photo: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=72", blockUSD: 1480, listUSD: 2080, occ: "5" },
+];
+
+/* Spa add-ons (The Spa at AVA — AVA Resort Cancún) */
+const SPA = [
+  { id: "spa-couples",  name: "Couples Sunset Ritual",
+    loc: "The Spa at AVA · Treatment Suite 4", priceUSD: 720,
+    desc: "Side-by-side massage, sea-salt scrub, and a private jacuzzi terrace as the Caribbean sun drops. Aria's pre-wedding pick.",
+    bullets: ["For 2 · 90 min", "Champagne & ceviche after", "Ocean-view treatment suite"],
+    photo: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=72" },
+  { id: "spa-glow",     name: "Wedding Glow Facial",
+    loc: "The Spa at AVA", priceUSD: 285,
+    desc: "AVA's signature 75-minute brightening facial — schedule it 24 hrs before the ceremony for camera-ready skin.",
+    bullets: ["For 1 · 75 min", "Vitamin-C + lymphatic", "Photo-ready finish"],
+    photo: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=72" },
+  { id: "spa-onsen",    name: "Hot Stones & Hydrotherapy",
+    loc: "The Spa at AVA · Hydrotherapy circuit", priceUSD: 240,
+    desc: "60-minute hot-stone massage, then a soak through the thermal hydrotherapy circuit. A reset between the ceremony and the after-party.",
+    bullets: ["For 1 · 60 min", "Hydrotherapy circuit access", "Robe + sandals to take home"],
+    photo: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=72" },
+  { id: "spa-bridal",   name: "Bridesmaid Hair & Makeup",
+    loc: "Suite 1208 · in-room", priceUSD: 380,
+    desc: "Aria's hair & makeup team is on property all morning. Slot in for the ceremony — discounted rate for guests in the block.",
+    bullets: ["For 1 · 90 min", "Trial included", "Touch-up kit to take with you"],
+    photo: "https://images.unsplash.com/photo-1522335789203-aaa11d4f4d7d?auto=format&fit=crop&w=900&q=72", popular: true },
+  { id: "spa-stargaze", name: "Rooftop Stargazing Soak",
+    loc: "AVA North Tower rooftop", priceUSD: 380,
+    desc: "Private rooftop hot tub with a personal mixologist and small-bites tasting plate. Weddings make people romantic.",
+    bullets: ["For 2 · 2 hrs", "Mezcal flight", "Telescope on deck"],
+    photo: "https://images.unsplash.com/photo-1531112405267-d2c1546f4d2e?auto=format&fit=crop&w=900&q=72" },
+  { id: "spa-mezcal",   name: "Mezcal & Massage",
+    loc: "The Spa at AVA", priceUSD: 320,
+    desc: "Late-afternoon couples massage paired with a 4-bottle Oaxacan mezcal flight. For the friends who arrived too early to nap.",
+    bullets: ["For 2 · 60 min", "4-bottle mezcal flight", "Light bites + agua de jamaica"],
+    photo: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=72" },
+
+  /* Allie's hand-picked pre-wedding spa morning. Shown in the home-page
+     timeline AND in the Spa tab — `publishedUSD` triggers the discount
+     strikethrough; `allieRec` flags the upgraded card treatment. */
+  { id: "spa-allie-day", name: "Pre-Wedding Spa Morning",
+    loc: "The Spa at AVA · 4-hour ritual", priceUSD: 480, publishedUSD: 720, allieRec: true,
+    desc: "Aria's pre-wedding glow ritual: 90-min couples massage, sea-salt scrub, hydrotherapy circuit + steam, and a champagne lunch on the oceanfront terrace before tonight's welcome cocktails.",
+    bullets: ["For 2 · 4 hrs", "Hydrotherapy + steam included", "Champagne lunch after"],
+    photo: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=72" },
+];
+
+/* Excursions (off-property, hotel-arranged — Cancún & Riviera Maya) */
+const EXC = [
+  { id: "exc-arch",     name: "Isla Mujeres Catamaran & Snorkel",
+    loc: "Cancún Marina · 9 AM departure", priceUSD: 95,
+    desc: "Half-day catamaran to Isla Mujeres — snorkel Punta Sur reef, lunch at Playa Norte, return by golf cart to the dock.",
+    bullets: ["For 1 · 5 hrs", "Snorkel gear included", "Open bar + buffet lunch"],
+    photo: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=900&q=72", popular: true },
+  { id: "exc-whale",    name: "Whale Shark Snorkel",
+    loc: "Holbox / Isla Mujeres · 6 AM departure", priceUSD: 280,
+    desc: "Small-boat charter to where the whale sharks migrate (May–Sept). Captain who's been guiding these waters for 20 years. Pre-dawn coffee and full breakfast included.",
+    bullets: ["For 1 · 8 hrs", "Seasonal · May–Sept", "Wetsuit + breakfast aboard"],
+    photo: "https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=900&q=72" },
+  { id: "exc-todos",    name: "Tulum Ruins & Cenote",
+    loc: "Riviera Maya · full day", priceUSD: 165,
+    desc: "Drive south to walk the cliffside Mayan ruins at Tulum, then swim a freshwater cenote on the way back. Easy day for early arrivals.",
+    bullets: ["For 1 · 8 hrs", "Private guide", "Cenote swim included"],
+    photo: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=900&q=72" },
+  { id: "exc-snorkel",  name: "MUSA Underwater Museum",
+    loc: "Punta Nizuc · half day", priceUSD: 130,
+    desc: "Snorkel the world's largest underwater sculpture park — 500 statues in 15 feet of turquoise water. The wedding party's day-before pick.",
+    bullets: ["For 1 · 4 hrs", "All gear included", "Open bar + light lunch"],
+    photo: "https://images.unsplash.com/photo-1583122321203-ff8d70d6c75c?auto=format&fit=crop&w=900&q=72" },
+  { id: "exc-atv",      name: "Selvática ATV + Zipline",
+    loc: "Riviera Maya jungle · half day", priceUSD: 175,
+    desc: "ATV through the jungle, then ten ziplines across the canopy and a swim in a hidden cenote. Closed-toe shoes required.",
+    bullets: ["For 1 · 5 hrs", "Single or tandem ATV", "Tequila tasting at the end"],
+    photo: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=900&q=72" },
+  { id: "exc-yacht",    name: "Sunset Catamaran Charter",
+    loc: "Cancún Marina · 5 PM", priceUSD: 215,
+    desc: "Three-hour sunset sail along the hotel zone with open bar and a tapas dinner. Group rate from Aria's wedding block.",
+    bullets: ["For 1 · 3 hrs", "Open bar", "Tapas dinner aboard"],
+    photo: "https://images.unsplash.com/photo-1543721090-3170be3ad8a9?auto=format&fit=crop&w=900&q=72" },
+
+  /* Allie's curated wedding-weekend upsells — surfaced in the timeline. */
+  { id: "exc-golf",     name: "Sunrise Tee Time · Riviera Maya Golf",
+    loc: "Riviera Maya Golf Club · 7:00 AM", priceUSD: 195, publishedUSD: 340, allieRec: true,
+    desc: "Beat the heat — tee off pre-ceremony with the groomsmen on the Robert Trent Jones II jungle-and-Caribbean 18. Cart, caddy, breakfast at the turn, and round-trip resort transfer included.",
+    bullets: ["For 1 · 4 hrs", "Cart + caddy", "Resort transfers"],
+    photo: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=900&q=72" },
+  { id: "exc-dolphin",  name: "Dolphin Encounter · Isla Mujeres",
+    loc: "Dolphin Discovery, Isla Mujeres · 9:00 AM", priceUSD: 135, publishedUSD: 185, allieRec: true,
+    desc: "60-minute swim with bottlenose dolphins in the natural Isla Mujeres lagoon. Round-trip ferry + GoPro photo package included — a sweet last-day moment with the friends still around.",
+    bullets: ["For 1 · 90 min in-water", "Photo package included", "Ferry transfer included"],
+    photo: "https://images.unsplash.com/photo-1564550974352-712c7eb6dbb6?auto=format&fit=crop&w=900&q=72" },
+];
+
+/* ============================================================
+   ALLIE_PICKS — Allie's hand-curated upsells inside the wedding
+   itinerary timeline. Each entry references an item in SPA or EXC
+   (so the cart code is unchanged), plus three pieces of timeline
+   metadata: which day, which time slot, and the rationale Allie
+   would give the guest in plain English.
+   ============================================================ */
+const ALLIE_PICKS = [
+  { id: "spa-allie-day", cartKey: "spa", day: "fri", time: "11:00 AM", sortMin: 11*60,
+    why: "I picked this because it's the only spa block long enough to actually unwind before tonight's 7 PM welcome cocktails on the Oceanfront Terrace — and Aria's already booked the same suite for her crew." },
+  { id: "exc-golf",      cartKey: "exc", day: "sat", time: "7:00 AM",  sortMin: 7*60,
+    why: "Tee off before the Caribbean humidity sets in — ocean views the whole back nine. You'll be back, showered, and dressed well before the 4 PM Oceanfront Terrace ceremony." },
+  { id: "exc-dolphin",   cartKey: "exc", day: "sun", time: "9:00 AM",  sortMin: 9*60,
+    why: "Last-day sweetness — ferry across to Isla Mujeres at sunrise. Wraps with 30 minutes to spare before the 10:30 farewell brunch — and the photos make the album." },
+];
+
+/* ============================================================
+   REGISTRY — "wedding extras" that guests can buy as gifts
+   for Aria & Marcus. Two shapes:
+     - type: "full"   — single-claim experience; one guest pays
+                        the priceUSD in full and the item is
+                        marked as gifted. `claimedBy` seeds a
+                        few items as already-claimed by other
+                        guests so the registry feels lived-in.
+     - type: "fund"   — pooled honeymoon fund; any number of
+                        guests contribute any amount toward
+                        a shared goalUSD. `raisedUSD` is the
+                        baseline raised by other guests before
+                        Sofía opens the portal.
+   The current guest's contributions are tracked in
+   state.registryGifts as [{ id, amount, type }].
+   ============================================================ */
+const REGISTRY = [
+  {
+    id: "gift-suite-upgrade",
+    name: "Honeymoon Suite Upgrade",
+    type: "full",
+    priceUSD: 400,
+    eyebrow: "On-property · 3 nights",
+    desc: "Bump Aria & Marcus up to the Presidential Honeymoon Suite for the first three nights of their stay — corner balcony, plunge pool, sunrise straight over the Caribbean.",
+    bullets: ["3 nights · Mon–Wed", "Plunge pool + corner terrace", "VIP butler service"],
+    photo: "https://images.unsplash.com/photo-1566073771259-2a04524b2bcb?auto=format&fit=crop&w=900&q=72",
+    claimedBy: null,
+  },
+  {
+    id: "gift-private-dinner",
+    name: "Private Oceanfront Dinner",
+    type: "full",
+    priceUSD: 620,
+    eyebrow: "On-property · Romantic",
+    desc: "A candlelit beachfront dinner for two — personal chef, six-course tasting, mariachi serenade, and a bottle of Aria's favorite Veuve under the stars.",
+    bullets: ["For 2 · 3 hrs", "Personal chef + server", "Champagne + mariachi"],
+    photo: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=72",
+    claimedBy: "Priya & Dev Mehta",
+  },
+  {
+    id: "gift-spa-day",
+    name: "Couples Spa Day",
+    type: "full",
+    priceUSD: 480,
+    eyebrow: "On-property · The Spa at AVA",
+    desc: "A full-day couples ritual at The Spa at AVA — side-by-side massages, the hydrotherapy circuit, and a private terrace lunch.",
+    bullets: ["For 2 · 5 hrs", "Hydro + terrace lunch", "Same therapists as the wedding party"],
+    photo: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=72",
+    claimedBy: null,
+  },
+  {
+    id: "gift-catamaran",
+    name: "Sunset Catamaran Charter",
+    type: "full",
+    priceUSD: 850,
+    eyebrow: "Excursion · For the couple",
+    desc: "A private sunset charter for two — catamaran, captain, champagne, and three hours along the Cancún coastline. Allie packs a hand-written note from the wedding party.",
+    bullets: ["For 2 · 3 hrs", "Private vessel + captain", "Champagne + canapés"],
+    photo: "https://images.unsplash.com/photo-1543721090-3170be3ad8a9?auto=format&fit=crop&w=900&q=72",
+    claimedBy: null,
+  },
+  {
+    id: "gift-breakfast",
+    name: "In-Suite Breakfast · 3 mornings",
+    type: "full",
+    priceUSD: 145,
+    eyebrow: "On-property · Mornings",
+    desc: "Breakfast in bed every morning of the honeymoon week — fresh fruit, eggs benedict, pastries, fresh-pressed juice, and a single rose on the tray.",
+    bullets: ["3 mornings", "Delivered to the suite", "Roses + fresh-pressed juice"],
+    photo: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=900&q=72",
+    claimedBy: "Margot Reyes",
+  },
+  {
+    id: "gift-photoshoot",
+    name: "Golden-Hour Photo Session",
+    type: "full",
+    priceUSD: 720,
+    eyebrow: "On-property · 2 hrs",
+    desc: "A private two-hour photoshoot at golden hour with AVA's resort photographer. Edited digital album in their inbox within seven days — separate from the wedding album.",
+    bullets: ["2 hrs · golden hour", "Digital album in 7 days", "Private locations on property"],
+    photo: "https://images.unsplash.com/photo-1522335789203-aaa11d4f4d7d?auto=format&fit=crop&w=900&q=72",
+    claimedBy: null,
+  },
+  {
+    id: "gift-fund",
+    name: "Honeymoon Fund",
+    type: "fund",
+    goalUSD: 2400,
+    raisedUSD: 1380,
+    eyebrow: "Group gift · Pool together",
+    desc: "Toward all the extras Aria & Marcus will dream up during the honeymoon week — sunset cocktails on the terrace, the last-minute Tulum day-trip, the second bottle of mezcal. Give any amount.",
+    bullets: ["Contribute any amount", "100% goes to the couple", "Combined with everyone else's gifts"],
+    photo: "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?auto=format&fit=crop&w=900&q=72",
+  },
+];
+
+/* ============================================================
+   STATE — held in localStorage so reloads keep itinerary
+   ============================================================ */
+
+const STORE_KEY = "aiw_guest_portal_v1";
+
+const defaultState = {
+  guest: { name: "", email: "" },
+  emailClicked: false,         // simulated invite-email screen on first visit
+  loggedIn: false,
+  section: "home",
+  rsvp: null,                 // "yes" | "maybe" | "no"
+  attending: null,            // "couple" | "solo" | null
+  plusOne: "",
+  cartOpen: false,
+  /* Booked items */
+  room: null,                 // { roomId, checkIn, checkOut, guests }
+  spa: [],                    // [ id, ... ]
+  exc: [],
+  transport: null,            // { booked: true, priceUSD, kind } | null
+  recovery: null,             // { booked: true, massageUSD, extendedNight: bool } | null
+  registryGifts: [],          // [{ id, amount, type: "full"|"fund" }]
+  /* Referral program — seed with one pending + one booked friend
+     so the "voucher earned" state is visible out of the box. Each
+     entry: { name, email, status: "invited"|"booked", invitedAt,
+              bookedAt? } */
+  referrals: [
+    { name: "Camila Reyes", email: "camila.r@gmail.com",
+      status: "invited", invitedAt: "2026-04-03" },
+    { name: "Marcus Pham",  email: "mp@hey.com",
+      status: "booked",  invitedAt: "2026-03-30", bookedAt: "2026-04-08" },
+  ],
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return { ...defaultState };
+    return { ...defaultState, ...JSON.parse(raw) };
+  } catch (_) { return { ...defaultState }; }
+}
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (_) {}
+}
+
+/* ============================================================
+   RENDER UTIL
+   ============================================================ */
+
+const $app = document.getElementById("app");
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, m => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[m]));
+}
+
+function usd(n) {
+  if (typeof n !== "number") return "—";
+  const sign = n < 0 ? "−" : "";
+  const abs  = Math.abs(n).toLocaleString("en-US", { maximumFractionDigits: 0 });
+  return `${sign}$${abs}`;
+}
+
+/* ============================================================
+   REFERRAL PROGRAM
+   — Deterministic code derived from the guest's email so the
+   same person always sees the same code across sessions. The
+   first friend who books unlocks a free round-trip airport
+   voucher worth $245; the voucher applies against state.transport
+   if the guest has booked transportation, otherwise it shows in
+   the cart as a bankable perk ready to apply at check-in.
+   ============================================================ */
+const VOUCHER_USD = 245;
+function makeReferralCode(email) {
+  const s = String(email || "guest").toLowerCase().trim();
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) | 0;
+  const tail = Math.abs(h).toString(36).toUpperCase().padStart(5, "0").slice(0, 5);
+  return `ARIAMRC-${tail}`;
+}
+function referralLink(email) {
+  return `https://allinweddings.com/aria-marcus?ref=${makeReferralCode(email)}`;
+}
+function earnedVoucherCount() {
+  return (state.referrals || []).filter(r => r.status === "booked").length;
+}
+function pendingReferralCount() {
+  return (state.referrals || []).filter(r => r.status === "invited").length;
+}
+
+function setApp(html) { $app.innerHTML = html; }
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  document.getElementById("toast-msg").textContent = msg;
+  t.dataset.show = "true";
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(() => { t.dataset.show = "false"; }, 2400);
+}
+
+function initials(name) {
+  if (!name) return "G";
+  return name.trim().split(/\s+/).map(p => p[0] || "").join("").slice(0, 2).toUpperCase() || "G";
+}
+
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+
+let _countHandle = null;
+function stopCountdown() {
+  if (_countHandle) { clearInterval(_countHandle); _countHandle = null; }
+}
+function tickCountdown() {
+  const root = document.getElementById("count-cells");
+  if (!root) { stopCountdown(); return; }
+  const target = new Date(WEDDING.dateISO).getTime();
+  const ms = Math.max(0, target - Date.now());
+  const total = Math.floor(ms / 1000);
+  const days  = Math.floor(total / 86400);
+  const hours = Math.floor((total % 86400) / 3600);
+  const mins  = Math.floor((total %  3600) / 60);
+  const secs  = total % 60;
+  const map = { days, hours, mins, secs };
+  Object.entries(map).forEach(([k, v]) => {
+    const el = root.querySelector(`[data-cd="${k}"]`);
+    if (!el) return;
+    const next = String(v).padStart(k === "days" ? 3 : 2, "0");
+    if (el.textContent !== next) el.textContent = next;
+  });
+}
+
+/* ============================================================
+   ITINERARY / CART
+   ============================================================ */
+
+function cartLines() {
+  const lines = [];
+  if (state.room) {
+    const r = ROOMS.find(x => x.id === state.room.roomId);
+    if (r) {
+      const nights = countNights(state.room.checkIn, state.room.checkOut) || 2;
+      const savings = (r.listUSD - r.blockUSD) * nights;
+      const discountPct = Math.round((r.listUSD - r.blockUSD) / r.listUSD * 100);
+      lines.push({
+        kind: "Stay",
+        title: `${r.name} · ${nights} ${nights === 1 ? "night" : "nights"}`,
+        sub: `${state.room.checkIn} → ${state.room.checkOut} · ${state.room.guests} guest${state.room.guests > 1 ? "s" : ""} · ${discountPct}% block discount · save ${usd(savings)}`,
+        price: r.blockUSD * nights,
+        remove: () => { state.room = null; saveState(); renderCart(); rerenderActive(); },
+      });
+    }
+  }
+  state.spa.forEach(id => {
+    const s = SPA.find(x => x.id === id);
+    if (s) lines.push({ kind: "Spa", title: s.name, sub: s.loc, price: s.priceUSD,
+      remove: () => { state.spa = state.spa.filter(x => x !== id); saveState(); renderCart(); rerenderActive(); }});
+  });
+  state.exc.forEach(id => {
+    const s = EXC.find(x => x.id === id);
+    if (s) lines.push({ kind: "Excursion", title: s.name, sub: s.loc, price: s.priceUSD,
+      remove: () => { state.exc = state.exc.filter(x => x !== id); saveState(); renderCart(); rerenderActive(); }});
+  });
+  if (state.transport?.booked) {
+    lines.push({
+      kind: "Transport",
+      title: "Private car service · Diego",
+      sub: "Round-trip CUN + on-call weekend rides",
+      price: state.transport.priceUSD,
+      remove: () => { state.transport = null; saveState(); renderCart(); rerenderActive(); },
+    });
+  }
+  if (state.recovery?.booked) {
+    lines.push({
+      kind: "Recovery",
+      title: "Post-wedding recovery massage",
+      sub: "Hot Stones & Hydrotherapy · The Spa at AVA · −20%",
+      price: state.recovery.massageUSD,
+      remove: () => { state.recovery = null; saveState(); renderCart(); rerenderActive(); },
+    });
+  }
+  (state.registryGifts || []).forEach(g => {
+    const item = REGISTRY.find(x => x.id === g.id);
+    if (!item) return;
+    lines.push({
+      kind: "Wedding gift",
+      title: item.type === "fund"
+        ? `Honeymoon fund · gift for Aria & Marcus`
+        : `${item.name} · gift for Aria & Marcus`,
+      sub: item.type === "fund"
+        ? "Pooled honeymoon contribution · charged at check-in"
+        : `${item.eyebrow} · charged at check-in`,
+      price: g.amount || 0,
+      remove: () => {
+        state.registryGifts = state.registryGifts.filter(x => x.id !== g.id);
+        saveState();
+        renderCart();
+        rerenderActive();
+      },
+    });
+  });
+  /* Earned referral vouchers — applies against the transport
+     line if booked, otherwise shows as a bankable $0 perk so the
+     guest still sees the reward sitting in their cart. */
+  const earnedVouchers = earnedVoucherCount();
+  if (earnedVouchers > 0) {
+    const txpBooked = !!state.transport?.booked;
+    const txpPrice  = state.transport?.priceUSD || VOUCHER_USD;
+    if (txpBooked) {
+      lines.push({
+        kind: "Referral perk",
+        title: "Transportation voucher · applied",
+        sub: `Earned by referring ${earnedVouchers > 1 ? `${earnedVouchers} friends` : "a friend"} who booked · −${usd(txpPrice)}`,
+        price: -txpPrice,
+        perk: true,
+      });
+      if (earnedVouchers > 1) {
+        lines.push({
+          kind: "Referral perk",
+          title: `${earnedVouchers - 1} additional voucher${earnedVouchers > 2 ? "s" : ""} · banked`,
+          sub: "Use at check-in for spa, dining, or extra airport runs",
+          price: 0,
+          perk: true,
+        });
+      }
+    } else {
+      lines.push({
+        kind: "Referral perk",
+        title: `${earnedVouchers} transportation voucher${earnedVouchers > 1 ? "s" : ""} · ready to apply`,
+        sub: "Free round-trip airport service · auto-applies when you book transportation",
+        price: 0,
+        perk: true,
+      });
+    }
+  }
+  return lines;
+}
+
+function countNights(checkInISO, checkOutISO) {
+  if (!checkInISO || !checkOutISO) return 0;
+  const a = new Date(checkInISO).getTime();
+  const b = new Date(checkOutISO).getTime();
+  if (isNaN(a) || isNaN(b) || b <= a) return 0;
+  return Math.round((b - a) / 86400000);
+}
+
+function renderCart() {
+  const cart = document.getElementById("cart");
+  const lines = cartLines();
+  cart.dataset.empty = lines.length === 0 ? "true" : "false";
+  cart.dataset.open  = (state.cartOpen && lines.length > 0) ? "true" : "false";
+  document.getElementById("cart-head").setAttribute("aria-expanded", String(state.cartOpen && lines.length > 0));
+  const total = lines.reduce((s, l) => s + (l.price || 0), 0);
+  document.getElementById("cart-total").textContent = usd(total);
+  document.getElementById("cart-sub").textContent =
+    lines.length === 0
+      ? "Tap to expand · 0 items added"
+      : `Tap to ${state.cartOpen ? "collapse" : "expand"} · ${lines.length} item${lines.length === 1 ? "" : "s"} · group code applied`;
+
+  const list = document.getElementById("cart-list");
+  list.innerHTML = lines.map((l, idx) => `
+    <li class="cart__line${l.perk ? " cart__line--perk" : ""}">
+      <span>
+        <strong>${escapeHtml(l.title)}</strong>
+        <em>${escapeHtml(l.kind)} · ${escapeHtml(l.sub)}</em>
+      </span>
+      <span class="cart__line-price">${l.price === 0 && l.perk ? "Free" : usd(l.price)}</span>
+      ${typeof l.remove === "function"
+        ? `<button type="button" class="cart__remove" data-cart-remove="${idx}" aria-label="Remove ${escapeHtml(l.title)}">×</button>`
+        : `<span class="cart__remove" aria-hidden="true" style="visibility:hidden;">×</span>`}
+    </li>
+  `).join("");
+
+  list.querySelectorAll("[data-cart-remove]").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const idx = +btn.getAttribute("data-cart-remove");
+      const ln = lines[idx];
+      if (ln && typeof ln.remove === "function") ln.remove();
+    });
+  });
+}
+
+document.getElementById("cart-head").addEventListener("click", () => {
+  state.cartOpen = !state.cartOpen;
+  saveState();
+  renderCart();
+});
+
+document.getElementById("cart-checkout").addEventListener("click", () => {
+  const lines = cartLines();
+  if (!lines.length) return;
+  const total = lines.reduce((s, l) => s + (l.price || 0), 0);
+  showToast(`Confirmed · ${lines.length} item${lines.length === 1 ? "" : "s"} · ${usd(total)} on hold`);
+  state.cartOpen = false;
+  saveState();
+  renderCart();
+});
+
+/* ============================================================
+   HEADERS / NAV (shared chrome)
+   ============================================================ */
+
+function renderBar() {
+  const name = state.guest.name || "Guest";
+  const earned = earnedVoucherCount();
+  const referLabel = earned > 0
+    ? `★ ${earned} voucher${earned > 1 ? "s" : ""} earned`
+    : `Refer · earn ${usd(VOUCHER_USD)}`;
+  return `
+    <header class="bar">
+      <span class="bar__crest" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l4 8h-8l4-8zM4 10h16l-8 12L4 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="bar__brand">All-In Weddings</span>
+      <span class="bar__divider">·</span>
+      <span class="bar__product">Guest Portal · Aria & Marcus</span>
+      <span class="bar__user">
+        <button type="button"
+                class="bar__refer${earned > 0 ? " bar__refer--earned" : ""}"
+                data-section="profile"
+                aria-label="${earned > 0 ? `${earned} transportation voucher earned — open profile` : "Refer a friend and earn a free transportation voucher"}">
+          ${referLabel}
+        </button>
+        <button type="button"
+                class="bar__profile"
+                data-section="profile"
+                aria-label="Open your profile">
+          <span class="bar__avatar" aria-hidden="true">${escapeHtml(initials(name))}</span>
+          <span class="bar__profile-name">${escapeHtml(name)}</span>
+        </button>
+        <button type="button" class="bar__signout" id="signout">Sign out</button>
+      </span>
+    </header>
+  `;
+}
+
+function renderNav(active) {
+  const items = [
+    { id: "home",       label: "Home",
+      icon: `<path d="M3 11l9-8 9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "stay",       label: "Stay",
+      icon: `<path d="M3 12h18v8H3v-8z M5 12V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4 M9 12V8h6v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "spa",        label: "Spa",
+      icon: `<path d="M12 22c-4.5-3-8-7-8-12a4 4 0 0 1 8-2 4 4 0 0 1 8 2c0 5-3.5 9-8 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "excursions", label: "Excursions",
+      icon: `<path d="M3 19l4-9 5 5 4-7 5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "schedule",   label: "Schedule",
+      icon: `<rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M3.5 9h17 M8 3v4 M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>` },
+    { id: "registry",   label: "Registry",
+      icon: `<rect x="3.5" y="9" width="17" height="11" rx="1.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M3.5 9h17 M12 9v11 M7.5 9c-1.5 0-2.5-1-2.5-2.2 0-1.6 1.8-2.4 3.3-1.5C9.5 6.2 12 9 12 9s2.5-2.8 3.7-3.7c1.5-.9 3.3-.1 3.3 1.5 0 1.2-1 2.2-2.5 2.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+  ];
+  return `
+    <nav class="nav" role="tablist" aria-label="Guest portal sections">
+      ${items.map(it => `
+        <button type="button" class="nav__tab" role="tab"
+                data-section="${it.id}"
+                data-active="${it.id === active ? "true" : "false"}">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${it.icon}</svg>
+          <span>${escapeHtml(it.label)}</span>
+        </button>
+      `).join("")}
+    </nav>`;
+}
+
+function attachChrome() {
+  document.querySelectorAll("[data-section]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const section = btn.getAttribute("data-section");
+      if (!section || section === state.section) return;
+      state.section = section;
+      saveState();
+      route();
+    });
+  });
+  document.getElementById("signout")?.addEventListener("click", () => {
+    state.loggedIn = false;
+    saveState();
+    route();
+  });
+}
+
+/* ============================================================
+   ROUTING
+   ============================================================ */
+
+function route() {
+  stopCountdown();
+  /* Migration: if the user was already logged in from a prior session,
+     skip the new email-preview gate. */
+  if (state.loggedIn && !state.emailClicked) {
+    state.emailClicked = true;
+    saveState();
+  }
+  if (!state.emailClicked) return renderEmail();
+  if (!state.loggedIn) return renderLogin();
+  switch (state.section) {
+    case "stay":       return renderStay();
+    case "spa":        return renderSpa();
+    case "excursions": return renderExc();
+    case "schedule":   return renderSchedule();
+    case "registry":   return renderRegistry();
+    case "profile":    return renderProfile();
+    case "home":
+    default:           return renderHome();
+  }
+}
+
+function rerenderActive() { route(); }
+
+/* ============================================================
+   EMAIL PREVIEW (pre-login)
+   — First-touch screen that simulates the invite email landing
+   in Sofía's inbox. CTA flips state.emailClicked so subsequent
+   routes go straight to the sign-in screen.
+   ============================================================ */
+
+function renderEmail() {
+  const greetName = (state.guest.name || DEFAULT_GUEST.name).split(/\s+/)[0] || "Sofía";
+  setApp(`
+    <div class="email-page">
+      <header class="email-page__chrome">
+        <span class="email-page__brand">
+          <span class="email-page__brand-mark" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l4 8h-8l4-8zM4 10h16l-8 12L4 10z" fill="currentColor"/>
+            </svg>
+          </span>
+          All-In Weddings · Mail
+        </span>
+        <span class="email-page__time">9:14 AM · Today</span>
+      </header>
+
+      <article class="mail" role="article" aria-label="Wedding invitation email">
+        <header class="mail__head">
+          <div class="mail__avatar" aria-hidden="true">A</div>
+          <div class="mail__sender">
+            <p class="mail__from">Allie · All-In Weddings <span>&lt;allie@allinweddings.com&gt;</span></p>
+            <p class="mail__to">to ${escapeHtml(state.guest.name || DEFAULT_GUEST.name)} <em>&lt;${escapeHtml(state.guest.email || DEFAULT_GUEST.email)}&gt;</em></p>
+          </div>
+          <h2 class="mail__subject">You're invited to Aria &amp; Marcus's wedding</h2>
+        </header>
+
+        <section class="mail__body">
+          <p class="mail__greeting">Hi ${escapeHtml(greetName)},</p>
+          <p>You're invited to join <strong>Aria &amp; Marcus's</strong> wedding at AVA Resort Cancún on <strong>March 14, 2026</strong>.</p>
+          <p>I've put together your private guest portal — review the full weekend itinerary, book your room at the discounted block rate, browse the spa &amp; excursion add-ons we curated for the wedding party, and arrange your weekend transportation in one place.</p>
+          <p class="mail__cta-row">
+            <button type="button" class="mail__cta" data-open-portal>
+              Click here to see your wedding itinerary →
+            </button>
+          </p>
+          <p class="mail__sig">
+            With love,<br/>
+            Allie
+            <em>Your All-In Weddings concierge for the weekend</em>
+          </p>
+        </section>
+
+        <footer class="mail__foot">
+          All-In Weddings · Aria &amp; Marcus · March 14, 2026 · AVA Resort Cancún
+        </footer>
+      </article>
+
+      <p class="email-page__hint">↑ Simulated invitation email · tap the button to open the guest portal</p>
+    </div>
+  `);
+  document.querySelector("[data-open-portal]")?.addEventListener("click", () => {
+    state.emailClicked = true;
+    saveState();
+    route();
+  });
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+function renderLogin() {
+  setApp(`
+    <div style="margin:0;">
+      ${renderBar()}
+      <div class="login__hero">
+        <p class="login__eyebrow">Guest Portal · Sign in</p>
+        <h1 class="login__title">You're invited to <em>Aria &amp; Marcus</em>'s wedding.</h1>
+        <p class="login__sub">
+          March 14, 2026 at AVA Resort Cancún. Use this portal to book your room block, browse on-property spa, excursions, and dinners — every line item carries the wedding-block discount.
+        </p>
+      </div>
+      <form class="login__form" id="login-form">
+        <div class="field">
+          <label for="g-email">Your email</label>
+          <input id="g-email" type="email" autocomplete="email" required
+                 placeholder="you@example.com"
+                 value="${escapeHtml(state.guest.email || DEFAULT_GUEST.email)}"/>
+        </div>
+        <div class="field">
+          <label for="g-name">Your name (as on the invite)</label>
+          <input id="g-name" type="text" autocomplete="name" required
+                 placeholder="First Last"
+                 value="${escapeHtml(state.guest.name || DEFAULT_GUEST.name)}"/>
+        </div>
+        <button type="submit" class="btn btn--block" style="height:46px;border-radius:10px;letter-spacing:0.1em;">Continue → Guest Portal</button>
+        <p style="font-size:11px;line-height:1.5;color:var(--ink-faint);margin:4px 0 0;">
+          We'd normally send a one-time sign-in link to your inbox. For this prototype, hit Continue.
+        </p>
+      </form>
+    </div>
+  `);
+  document.getElementById("login-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const email = document.getElementById("g-email").value.trim();
+    const name  = document.getElementById("g-name").value.trim();
+    state.guest = {
+      email: email || DEFAULT_GUEST.email,
+      name:  name  || DEFAULT_GUEST.name,
+    };
+    state.loggedIn = true;
+    state.section = "home";
+    saveState();
+    route();
+  });
+  renderCart();
+}
+
+/* ============================================================
+   TIMELINE — anchor of the home + schedule pages
+   Merges fixed wedding events (SCHEDULE) with Allie's recommended
+   upsells (ALLIE_PICKS) day-by-day in chronological order.
+   ============================================================ */
+
+function parseTimeToMin(t) {
+  const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(String(t || "").trim());
+  if (!m) return 0;
+  let h = +m[1];
+  const min = +m[2];
+  const ampm = m[3].toUpperCase();
+  if (ampm === "PM" && h !== 12) h += 12;
+  if (ampm === "AM" && h === 12) h = 0;
+  return h * 60 + min;
+}
+
+function renderTimeline(opts = {}) {
+  const calloutHtml = opts.showTransport ? renderTransportCallout() : "";
+  const html = SCHEDULE.map(day => {
+    const fixedRows = day.events.map(e => ({
+      type:    "fixed",
+      time:    e.time,
+      sortMin: parseTimeToMin(e.time),
+      what:    e.what,
+      em:      e.em,
+      key:     e.key || null,
+    }));
+    const pickRows = ALLIE_PICKS.filter(p => p.day === day.day).map(p => {
+      const inv  = p.cartKey === "spa" ? SPA : EXC;
+      const item = inv.find(x => x.id === p.id);
+      return {
+        type:    "pick",
+        time:    p.time,
+        sortMin: p.sortMin || parseTimeToMin(p.time),
+        pick:    p,
+        item,
+      };
+    });
+    const rows = [...fixedRows, ...pickRows].sort((a, b) => a.sortMin - b.sortMin);
+    const rowsHtml = rows.map(r => r.type === "pick" ? renderPickRow(r) : renderFixedRow(r)).join("");
+
+    return `
+      <div class="tl-day">
+        <p class="tl-day__eyebrow">${escapeHtml(day.date)}</p>
+        <h3 class="tl-day__title">${escapeHtml(day.title)}</h3>
+        <span class="tl-day__rule" aria-hidden="true"></span>
+      </div>
+      ${rowsHtml}
+    `;
+  }).join("");
+  return `<div class="tl">${calloutHtml}${html}</div>`;
+}
+
+/* Allie's broadcast callout at the top of the Schedule timeline.
+   One-click toggle: book/unbook a private weekend car service. */
+function renderTransportCallout() {
+  const booked   = !!state.transport?.booked;
+  const priceUSD = 245;
+  return `
+    <div class="tl-callout ${booked ? "tl-callout--booked" : ""}" data-transport-callout>
+      <div class="tl-callout__avatar" aria-hidden="true">A</div>
+      <div class="tl-callout__body">
+        <span class="tl-callout__eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 13l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5v6h-3v-2H6v2H3v-6z M6.5 16a1 1 0 1 0 0-2 1 1 0 0 0 0 2z M17.5 16a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+          Allie's concierge note
+        </span>
+        <h3 class="tl-callout__title">${booked ? "Diego is your driver all weekend" : "Book transportation with Allie"}</h3>
+        <p class="tl-callout__sub">${booked
+          ? "Round-trip CUN airport transfer locked in, plus on-call rides between every weekend event. Diego will text you 24 hrs before pickup — message Allie any time to add or change a ride."
+          : "Private car service for the full weekend: round-trip from Cancún International (CUN), plus on-call rides between every event Friday through Sunday. One driver assigned to you start-to-finish — no apps, no surge pricing, no surprises."}</p>
+        <div class="tl-callout__meta">
+          <span class="tl-callout__price">${usd(priceUSD)}<em>per guest · all-weekend</em></span>
+          <span class="tl-callout__chip">−20% block rate</span>
+        </div>
+      </div>
+      <button type="button" class="tl-callout__cta" data-book-transport>
+        ${booked ? "Booked — manage" : "Book with Allie →"}
+      </button>
+    </div>
+  `;
+}
+
+function renderFixedRow(r) {
+  const dataKey = r.key ? ` data-key="${escapeHtml(r.key)}"` : "";
+  return `
+    <div class="tl-row"${dataKey}>
+      <div class="tl-row__time">${escapeHtml(r.time)}</div>
+      <div class="tl-row__rail" aria-hidden="true"><span class="tl-row__dot"></span></div>
+      <div class="tl-event">
+        <h4 class="tl-event__title">${escapeHtml(r.what)}</h4>
+        <p class="tl-event__sub">${escapeHtml(r.em)}</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderPickRow(r) {
+  const { pick, item, time } = r;
+  if (!item) return "";
+  const added   = state[pick.cartKey].includes(pick.id);
+  const savings = (item.publishedUSD || 0) - (item.priceUSD || 0);
+  return `
+    <div class="tl-row tl-row--pick">
+      <div class="tl-row__time">${escapeHtml(time)}</div>
+      <div class="tl-row__rail" aria-hidden="true"><span class="tl-row__dot"></span></div>
+      <article class="tl-pick ${added ? "tl-pick--added" : ""}">
+        <div class="tl-pick__photo" style="background-image:url('${item.photo}')" aria-hidden="true"></div>
+        <div class="tl-pick__body">
+          <div class="tl-pick__head">
+            <span class="tl-pick__badge">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3l1.6 4.5 4.5 1.6-4.5 1.6L12 15l-1.6-4.3-4.5-1.6 4.5-1.6L12 3z M19 16l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7L19 16z" fill="currentColor"/>
+              </svg>
+              Allie's pick
+            </span>
+            ${savings > 0 ? `<span class="tl-pick__save">Save ${usd(savings)} with All-In</span>` : ""}
+          </div>
+          <h4 class="tl-pick__title">${escapeHtml(item.name)}</h4>
+          <div class="tl-pick__why">
+            <strong>Why I picked this</strong>
+            ${escapeHtml(pick.why)}
+          </div>
+          <p class="tl-pick__desc">${escapeHtml(item.desc)}</p>
+          <ul class="tl-pick__bullets">
+            ${item.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+          </ul>
+          <div class="tl-pick__foot">
+            <div class="tl-pick__price">
+              <span class="tl-pick__price-row">
+                ${item.publishedUSD ? `<s>${usd(item.publishedUSD)}</s>` : ""}
+                <strong>${usd(item.priceUSD)}</strong>
+                <em>All-In rate</em>
+              </span>
+              <span style="font-size:10.5px;letter-spacing:0.06em;color:var(--ink-faint);">${escapeHtml(item.loc)}</span>
+            </div>
+            <button type="button" class="tl-pick__cta" data-toggle-pick="${escapeHtml(pick.id)}:${escapeHtml(pick.cartKey)}">
+              ${added ? "Added to itinerary" : "Add to itinerary"}
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
+function attachTimeline() {
+  document.querySelectorAll("[data-toggle-pick]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const [id, key] = btn.getAttribute("data-toggle-pick").split(":");
+      const inv  = key === "spa" ? SPA : EXC;
+      const item = inv.find(x => x.id === id);
+      if (state[key].includes(id)) {
+        state[key] = state[key].filter(x => x !== id);
+        showToast(`Removed · ${item?.name || "item"}`);
+      } else {
+        state[key] = [...state[key], id];
+        state.cartOpen = true;
+        showToast(`Added · ${item?.name || "item"}`);
+      }
+      saveState();
+      route();
+    });
+  });
+  document.querySelectorAll("[data-book-transport]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (state.transport?.booked) {
+        state.transport = null;
+        showToast("Transport removed · Diego freed up");
+      } else {
+        state.transport = { booked: true, priceUSD: 245, kind: "round" };
+        state.cartOpen = true;
+        showToast("Transport booked · Diego is your driver");
+      }
+      saveState();
+      route();
+    });
+  });
+}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+
+function renderHome() {
+  const target = new Date(WEDDING.dateISO).getTime();
+  const ms = Math.max(0, target - Date.now());
+  const days = Math.floor(ms / 86400000);
+  const heroTitle = days > 0
+    ? `<em>${days}</em> days until Aria & Marcus say "I do"`
+    : `Today's the day`;
+
+  const hasRoom = !!state.room;
+  const spaCount = state.spa.length;
+  const excCount = state.exc.length;
+  const totalAdd = spaCount + excCount;
+
+  const actions = [
+    { id: "stay", title: hasRoom ? "Your room is held" : "Book your room block",
+      desc: hasRoom
+        ? `${ROOMS.find(r => r.id === state.room.roomId)?.name} — ${state.room.checkIn} → ${state.room.checkOut}. Manage or change anytime.`
+        : `Block rates from $540/night (rack $745, already 27% off), locked through Feb 13. Two-night minimum, three-night recommended for the full wedding weekend.`,
+      badge: hasRoom ? "Held ✓" : "−27% off published",
+      badgeStyle: hasRoom ? "" : "copper",
+      icon: `<path d="M3 12h18v8H3v-8z M5 12V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4 M9 12V8h6v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "spa", title: "The Spa at AVA — wedding rates",
+      desc: spaCount > 0 ? `${spaCount} treatment${spaCount > 1 ? "s" : ""} added.` : `Massages, facials, and the rooftop soak — every treatment 15% off for guests in the block.`,
+      badge: "−15% wedding rate", badgeStyle: "copper",
+      icon: `<path d="M12 22c-4.5-3-8-7-8-12a4 4 0 0 1 8-2 4 4 0 0 1 8 2c0 5-3.5 9-8 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "excursions", title: "Excursions",
+      desc: excCount > 0 ? `${excCount} excursion${excCount > 1 ? "s" : ""} on your itinerary.` : `Isla Mujeres catamaran, Tulum ruins, ATV through the jungle — all bookable on the block.`,
+      badge: `${EXC.length} options`, badgeStyle: "",
+      icon: `<path d="M3 19l4-9 5 5 4-7 5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+    { id: "registry", title: "Wedding extras — gift the couple",
+      desc: (state.registryGifts && state.registryGifts.length > 0)
+        ? `${state.registryGifts.length} gift${state.registryGifts.length > 1 ? "s" : ""} added · ${usd(state.registryGifts.reduce((s,g)=>s+(g.amount||0),0))} for Aria & Marcus.`
+        : `Skip the toaster. Gift a private oceanfront dinner, a couples spa day, a sunset sail — or contribute any amount to their honeymoon fund.`,
+      badge: "Wedding gift", badgeStyle: "copper",
+      icon: `<rect x="3.5" y="9" width="17" height="11" rx="1.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M3.5 9h17 M12 9v11 M7.5 9c-1.5 0-2.5-1-2.5-2.2 0-1.6 1.8-2.4 3.3-1.5C9.5 6.2 12 9 12 9s2.5-2.8 3.7-3.7c1.5-.9 3.3-.1 3.3 1.5 0 1.2-1 2.2-2.5 2.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>` },
+  ];
+
+  const actionsHtml = actions.map(a => `
+    <button type="button" class="action" data-section="${a.id}">
+      <span class="action__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">${a.icon}</svg>
+      </span>
+      <span class="action__body">
+        <span class="action__title">${escapeHtml(a.title)}</span>
+        <p>${escapeHtml(a.desc)}</p>
+        ${a.badge ? `<span class="action__badge${a.badgeStyle === "copper" ? " action__badge--copper" : ""}">${escapeHtml(a.badge)}</span>` : ""}
+      </span>
+      <span class="action__chev" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+  `).join("");
+
+  /* Quick stats above the timeline — Allie's pick count uses ALLIE_PICKS
+     so the strip can read "1 of 3 picks added" as a soft progress meter. */
+  const allieAdded = ALLIE_PICKS.filter(p => state[p.cartKey].includes(p.id)).length;
+  const allieTotal = ALLIE_PICKS.length;
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav("home")}
+    <section class="hero">
+      <div class="hero__bg"></div>
+      <div class="hero__inner">
+        <p class="hero__eyebrow">Welcome, ${escapeHtml(state.guest.name.split(" ")[0] || "Guest")}</p>
+        <h1 class="hero__title">${heroTitle}</h1>
+        <p class="hero__sub">
+          ${escapeHtml(WEDDING.venue)} · ${escapeHtml(WEDDING.city)} · ${escapeHtml(WEDDING.dateLong)}.
+          Below is the wedding-weekend itinerary Allie built for you — fixed events from Aria, plus three hand-picked upsells with All-In discounts you can add with one tap.
+        </p>
+        <div class="hero__count" id="count-cells">
+          <div class="hero__cell"><span class="hero__num" data-cd="days">000</span><span class="hero__lbl">Days</span></div>
+          <div class="hero__cell"><span class="hero__num" data-cd="hours">00</span><span class="hero__lbl">Hours</span></div>
+          <div class="hero__cell"><span class="hero__num" data-cd="mins">00</span><span class="hero__lbl">Mins</span></div>
+          <div class="hero__cell"><span class="hero__num" data-cd="secs">00</span><span class="hero__lbl">Secs</span></div>
+        </div>
+        <p class="hero__meta">
+          <span><strong>Hashtag:</strong> ${escapeHtml(WEDDING.hashtag)}</span>
+          <span><strong>Dress code:</strong> ${escapeHtml(WEDDING.dressCode)}</span>
+          <span><strong>Group code:</strong> ${escapeHtml(WEDDING.groupCode)}</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-pill"><span class="stat-pill__lbl">Wedding date</span><span class="stat-pill__val">${escapeHtml(WEDDING.dateLong.replace(", 2026", ""))}</span></div>
+      <div class="stat-pill"><span class="stat-pill__lbl">Venue</span><span class="stat-pill__val">${escapeHtml(WEDDING.venue)}</span></div>
+      <div class="stat-pill"><span class="stat-pill__lbl">Forecast</span><span class="stat-pill__val">${escapeHtml(WEDDING.weather)}</span></div>
+      <div class="stat-pill"><span class="stat-pill__lbl">Allie's picks</span><span class="stat-pill__val">${allieAdded} of ${allieTotal} added</span></div>
+    </section>
+
+    <div style="padding:18px 22px 2px; max-width:880px; margin:0 auto;">
+      <p class="section__eyebrow" style="margin-top:8px;">Your wedding-weekend itinerary</p>
+      <h2 class="section__title" style="font-size:30px;">A three-day rhythm — with <em>Allie's picks</em> built in.</h2>
+      <p class="section__sub" style="margin-bottom:0;">
+        The plain rows are what Aria & Marcus locked in. The card rows are Allie's recommended add-ons — handpicked to slot perfectly into the timeline, with All-In wedding-block discounts you won't find at the front desk.
+      </p>
+    </div>
+
+    ${renderTimeline()}
+
+    ${renderRsvpCard()}
+
+    <div style="padding:8px 22px 2px;">
+      <p class="section__eyebrow" style="margin-top:18px;">Want more options?</p>
+      <h2 class="section__title" style="font-size:24px;">Browse the full wedding-block menu.</h2>
+    </div>
+    <section class="actions">${actionsHtml}</section>
+  `);
+  attachChrome();
+  attachRsvp();
+  attachTimeline();
+  renderCart();
+  tickCountdown();
+  _countHandle = setInterval(tickCountdown, 1000);
+}
+
+function renderRsvpCard() {
+  const r = state.rsvp;
+  const a = state.attending;
+  return `
+    <section class="rsvp" style="margin: 0 22px 32px;">
+      <p class="section__eyebrow">RSVP</p>
+      <h2 class="section__title" style="font-size:30px;">Will we see you in <em>Cancún</em>?</h2>
+      <p class="section__sub">We need a final headcount by January 14, 2026 — but Aria says the sooner the better.</p>
+      <div class="rsvp__row">
+        <button class="pill pill--sage"   data-rsvp="yes"   data-selected="${r === "yes"   ? "true" : "false"}">Yes — wouldn't miss it</button>
+        <button class="pill pill--copper" data-rsvp="maybe" data-selected="${r === "maybe" ? "true" : "false"}">Maybe — let me check work</button>
+        <button class="pill"              data-rsvp="no"    data-selected="${r === "no"    ? "true" : "false"}">Can't make it · sending love</button>
+      </div>
+      ${r === "yes" ? `
+        <div class="rsvp__row" style="margin-top:18px;">
+          <button class="pill pill--copper" data-attending="couple" data-selected="${a === "couple" ? "true" : "false"}">Bringing my +1</button>
+          <button class="pill pill--copper" data-attending="solo"   data-selected="${a === "solo"   ? "true" : "false"}">Coming solo</button>
+        </div>
+      ` : ""}
+    </section>
+  `;
+}
+
+function attachRsvp() {
+  document.querySelectorAll("[data-rsvp]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.rsvp = btn.getAttribute("data-rsvp");
+      saveState();
+      renderHome();
+      showToast(state.rsvp === "yes" ? "Aria is so happy you're coming!" :
+                state.rsvp === "maybe" ? "Penciled in — we'll check back soon" :
+                "We'll miss you in Cancún");
+    });
+  });
+  document.querySelectorAll("[data-attending]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.attending = btn.getAttribute("data-attending");
+      saveState();
+      renderHome();
+    });
+  });
+}
+
+/* ============================================================
+   STAY (room block)
+   ============================================================ */
+
+function renderStay() {
+  const checkIn  = state.room?.checkIn  || "2026-03-13";
+  const checkOut = state.room?.checkOut || "2026-03-15";
+  const guests   = state.room?.guests   || 2;
+
+  const cardsHtml = ROOMS.map(r => {
+    const isBooked = state.room?.roomId === r.id;
+    const nights = countNights(checkIn, checkOut) || 2;
+    const stayTotal = r.blockUSD * nights;
+    const savings = (r.listUSD - r.blockUSD) * nights;
+    const discountPct = Math.round((r.listUSD - r.blockUSD) / r.listUSD * 100);
+    const popular = r.popular;
+    return `
+      <article class="card">
+        <div class="card__photo" style="background-image:url('${r.photo}')">
+          <span class="card__pricetag" title="Wedding block rate, ${discountPct}% off rack">
+            <span class="card__pricetag__label">Block · −${discountPct}%</span>
+            <span class="card__pricetag__row">
+              <s>${usd(r.listUSD)}</s>
+              <strong>${usd(r.blockUSD)}</strong>
+              <span>/nt</span>
+            </span>
+          </span>
+          ${popular ? `<span class="card__pricetag card__pricetag--solid" style="left:12px;right:auto;top:12px;background:var(--brand);color:#fff;">Most booked</span>` : ""}
+        </div>
+        <div class="card__body">
+          <span class="card__eyebrow">${escapeHtml(r.name)} · sleeps ${escapeHtml(r.occ)}</span>
+          <h3 class="card__title">${escapeHtml(r.name)}</h3>
+          <p class="card__desc">${escapeHtml(r.desc)}</p>
+          <ul class="card__bullets">
+            ${r.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="card__foot">
+          <div class="card__price">
+            <span class="card__price__label">
+              Wedding block rate
+              <span class="card__price__off">−${discountPct}% off</span>
+            </span>
+            <span class="card__price__row">
+              <s>${usd(r.listUSD * nights)}</s>
+              <strong>${usd(stayTotal)}</strong>
+            </span>
+            <span class="card__price__meta">
+              ${usd(r.blockUSD)}/nt × ${nights} night${nights === 1 ? "" : "s"} · <strong>you save ${usd(savings)}</strong>
+            </span>
+          </div>
+          <button class="btn ${isBooked ? "btn--added" : "btn--copper"}" data-book-room="${r.id}">
+            ${isBooked ? "Held" : "Hold this room"}
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav("stay")}
+    <main class="section">
+      <div class="section__head">
+        <button type="button" class="section__back" data-section="home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+      </div>
+      <p class="section__eyebrow">Stay · Room block</p>
+      <h1 class="section__title">Where you'll <em>sleep</em>.</h1>
+      <p class="section__sub">
+        Aria and Marcus held a room block at AVA Resort Cancún through <strong>Feb 13, 2026</strong>. Block rates are <strong>up to 27% off</strong> AVA's published all-inclusive nightly rate, with the resort fee waived. Two-night minimum.
+      </p>
+
+      <div class="stay-banner">
+        <span class="stay-banner__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </span>
+        <div>
+          <h3 class="stay-banner__title">Group code applied automatically</h3>
+          <p class="stay-banner__sub">No promo to enter — your link is keyed to the wedding block.</p>
+        </div>
+        <span class="stay-banner__code">${escapeHtml(WEDDING.groupCode)}</span>
+      </div>
+
+      <div class="stay-form">
+        <div class="field">
+          <label for="check-in">Check-in</label>
+          <input id="check-in" type="date" value="${checkIn}" min="2026-03-12" max="2026-03-17"/>
+        </div>
+        <div class="field">
+          <label for="check-out">Check-out</label>
+          <input id="check-out" type="date" value="${checkOut}" min="2026-03-13" max="2026-03-22"/>
+        </div>
+        <div class="field">
+          <label for="guests">Guests</label>
+          <select id="guests">
+            ${[1,2,3,4,5].map(n => `<option value="${n}" ${n === +guests ? "selected" : ""}>${n} ${n === 1 ? "guest" : "guests"}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="card-grid">${cardsHtml}</div>
+    </main>
+  `);
+  attachChrome();
+
+  /* Book buttons */
+  document.querySelectorAll("[data-book-room]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const roomId = btn.getAttribute("data-book-room");
+      const ci = document.getElementById("check-in").value;
+      const co = document.getElementById("check-out").value;
+      const g  = +document.getElementById("guests").value || 2;
+      if (countNights(ci, co) < 2) {
+        showToast("Two-night minimum — extend your check-out");
+        return;
+      }
+      state.room = { roomId, checkIn: ci, checkOut: co, guests: g };
+      state.cartOpen = true;
+      saveState();
+      const r = ROOMS.find(x => x.id === roomId);
+      showToast(`${r.name} held · ${countNights(ci, co)} nights`);
+      renderStay();
+      renderCart();
+    });
+  });
+
+  /* Re-render footer prices live as dates / occupancy change */
+  ["check-in", "check-out", "guests"].forEach(id => {
+    document.getElementById(id).addEventListener("change", () => {
+      const ci = document.getElementById("check-in").value;
+      const co = document.getElementById("check-out").value;
+      const g  = +document.getElementById("guests").value || 2;
+      if (state.room) {
+        state.room = { ...state.room, checkIn: ci, checkOut: co, guests: g };
+        saveState();
+      }
+      renderStay();
+      renderCart();
+    });
+  });
+  renderCart();
+}
+
+/* ============================================================
+   ADD-ON BROWSE (spa / excursions)
+   ============================================================ */
+
+function renderAddons({ section, eyebrow, title, sub, items, stateKey }) {
+  const cardsHtml = items.map(it => {
+    const inItin  = state[stateKey].includes(it.id);
+    const savings = (it.publishedUSD || 0) - (it.priceUSD || 0);
+    return `
+      <article class="card">
+        <div class="card__photo" style="background-image:url('${it.photo}')">
+          ${it.allieRec ? `<span class="card__pricetag" style="left:12px;right:auto;top:12px;background:var(--brand-darker);color:var(--brand-glow);letter-spacing:0.16em;">★ Allie's pick</span>` : ""}
+          ${it.popular  && !it.allieRec ? `<span class="card__pricetag" style="background:var(--brand);color:#fff;">Most booked</span>` : ""}
+          ${it.soldOut  ? `<span class="card__pricetag" style="background:rgba(43,43,39,0.92);color:#fff;">Invite only</span>` : ""}
+        </div>
+        <div class="card__body">
+          <span class="card__eyebrow">${escapeHtml(it.loc)}</span>
+          <h3 class="card__title">${escapeHtml(it.name)}</h3>
+          <p class="card__desc">${escapeHtml(it.desc)}</p>
+          <ul class="card__bullets">
+            ${it.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="card__foot">
+          <div class="card__price">
+            ${it.publishedUSD && savings > 0 ? `<span><s>${usd(it.publishedUSD)}</s></span>` : ""}
+            <strong>${it.priceUSD ? usd(it.priceUSD) : "—"}</strong>
+            <span>${
+              it.priceUSD
+                ? (savings > 0 ? `All-In rate · save ${usd(savings)}` : "wedding rate · per booking")
+                : "by invitation"
+            }</span>
+          </div>
+          ${it.soldOut
+            ? `<button class="btn btn--ghost" disabled style="opacity:0.6;cursor:not-allowed;">Invite only</button>`
+            : inItin
+              ? `<button class="btn btn--added" data-toggle-addon="${stateKey}:${it.id}">Added</button>`
+              : `<button class="btn" data-toggle-addon="${stateKey}:${it.id}">Add to itinerary</button>`}
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav(section)}
+    <main class="section">
+      <div class="section__head">
+        <button type="button" class="section__back" data-section="home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+      </div>
+      <p class="section__eyebrow">${escapeHtml(eyebrow)}</p>
+      <h1 class="section__title">${title}</h1>
+      <p class="section__sub">${sub}</p>
+      <div class="card-grid card-grid--3">${cardsHtml}</div>
+    </main>
+  `);
+  attachChrome();
+  document.querySelectorAll("[data-toggle-addon]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const [key, id] = btn.getAttribute("data-toggle-addon").split(":");
+      const list = state[key];
+      const item = items.find(x => x.id === id);
+      if (list.includes(id)) {
+        state[key] = list.filter(x => x !== id);
+        showToast(`Removed · ${item?.name || "item"}`);
+      } else {
+        state[key] = [...list, id];
+        state.cartOpen = true;
+        showToast(`Added · ${item?.name || "item"}`);
+      }
+      saveState();
+      route();
+    });
+  });
+  renderCart();
+}
+
+function renderSpa() {
+  return renderAddons({
+    section: "spa",
+    eyebrow: "Spa · The Spa at AVA",
+    title: `Make the days <em>feel</em> long.`,
+    sub: `The Spa at AVA is the resort's signature wellness wing — thermal hydrotherapy circuit, oceanfront treatment suites, the same therapists Aria booked for the wedding party. Every booking carries a 15% wedding rate.`,
+    items: SPA,
+    stateKey: "spa",
+  });
+}
+
+function renderExc() {
+  return renderAddons({
+    section: "excursions",
+    eyebrow: "Excursions · Off property",
+    title: `What you'll <em>do</em> when you're not eating.`,
+    sub: `Hotel-arranged transfers, group-block pricing. Most are bookable up to 24 hours before — but the boat trips fill first.`,
+    items: EXC,
+    stateKey: "exc",
+  });
+}
+
+/* ============================================================
+   REGISTRY — guest-side gift registry
+   — "Wedding extras" the couple has put on a registry. Two
+   shapes (see REGISTRY data block at top of script):
+     - "full" cards: one guest pays the listed price in full
+       and the experience is marked "Gifted by you" / "Already
+       gifted" so it can't be double-claimed.
+     - "fund" card: pooled honeymoon contribution. The guest
+       can type any amount; quick-pick chips populate the input.
+   Each gift the guest makes is stored in state.registryGifts
+   and shows up as a "Wedding gift" line in the cart drawer.
+   ============================================================ */
+
+function renderRegistry() {
+  /* Fund stats — the displayed `raised` includes the seed
+     `raisedUSD` from data plus the current guest's contribution
+     (if any). This gives the guest immediate visual feedback
+     when they add to the fund. */
+  const fundItem = REGISTRY.find(r => r.type === "fund");
+  const yourContribution = state.registryGifts.find(g => g.id === fundItem?.id)?.amount || 0;
+  const fundRaised = (fundItem?.raisedUSD || 0) + yourContribution;
+  const fundGoal   = fundItem?.goalUSD || 0;
+  const fundPct    = fundGoal ? Math.min(100, Math.round(fundRaised / fundGoal * 100)) : 0;
+
+  /* Experience-claim stats — "X of Y experiences claimed".
+     Counts experiences either pre-claimed (claimedBy seeded in
+     data) or gifted by the current guest in this session. */
+  const fullItems  = REGISTRY.filter(r => r.type === "full");
+  const claimedByOthers = fullItems.filter(r => r.claimedBy).length;
+  const claimedByYou    = state.registryGifts.filter(g => {
+    const it = REGISTRY.find(r => r.id === g.id);
+    return it && it.type === "full";
+  }).length;
+  const claimedTotal = claimedByOthers + claimedByYou;
+  const totalFull    = fullItems.length;
+
+  const cardsHtml = REGISTRY.map(item => {
+    if (item.type === "fund") {
+      return renderRegistryFundCard(item, yourContribution, fundRaised, fundGoal, fundPct);
+    }
+    return renderRegistryFullCard(item);
+  }).join("");
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav("registry")}
+    <main class="section">
+      <div class="section__head">
+        <button type="button" class="section__back" data-section="home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+      </div>
+      <p class="section__eyebrow">Registry · Wedding extras</p>
+      <h1 class="section__title">Give the couple something they'll <em>actually</em> remember.</h1>
+      <p class="section__sub">Aria &amp; Marcus skipped the toaster registry — instead they've put together a handful of on-property experiences and one shared honeymoon fund. Pick an experience to gift in full, or contribute any amount to the fund. Gifts ride along with the rest of your weekend itinerary below, and nothing is charged until you arrive at AVA.</p>
+    </main>
+
+    <section class="registry-banner" aria-label="Registry progress">
+      <div class="registry-banner__body">
+        <span class="registry-banner__chip">Wedding extras · gift the couple</span>
+        <h3 class="registry-banner__title">${claimedTotal} of ${totalFull} experiences claimed · <em>${usd(fundRaised)}</em> in the honeymoon fund</h3>
+        <p class="registry-banner__sub">Allie handles all the logistics behind the scenes — Aria &amp; Marcus only see the gifters' names on the card waiting in their suite. Each experience can be claimed by one guest; the honeymoon fund pools contributions from everyone.</p>
+        <div class="registry-banner__progress" aria-hidden="true">
+          <span style="width:${fundPct}%"></span>
+        </div>
+        <p class="registry-banner__meta"><strong>${usd(fundRaised)}</strong> raised of ${usd(fundGoal)} goal · ${fundPct}% to target${yourContribution > 0 ? ` · including <strong>${usd(yourContribution)}</strong> from you` : ""}</p>
+      </div>
+    </section>
+
+    <main class="section" style="padding-top:6px;">
+      <div class="card-grid card-grid--3">${cardsHtml}</div>
+    </main>
+  `);
+  attachChrome();
+  attachRegistry();
+  renderCart();
+}
+
+function renderRegistryFullCard(item) {
+  const youGifted = state.registryGifts.some(g => g.id === item.id);
+  const otherClaim = item.claimedBy && !youGifted ? item.claimedBy : null;
+  const isClaimed = youGifted || !!otherClaim;
+  const cardClass = `card${isClaimed ? " card--gifted" : ""}${youGifted ? " card--yours" : ""}`;
+  return `
+    <article class="${cardClass}" data-registry-card="${item.id}">
+      <div class="card__photo" style="background-image:url('${item.photo}')">
+        <span class="card__pricetag card__pricetag--solid" style="background:var(--brand);color:#fff;letter-spacing:0.12em;">${usd(item.priceUSD)} · Gift</span>
+        ${otherClaim ? `<span class="card__pricetag card__pricetag--solid" style="left:12px;right:auto;top:12px;background:rgba(43,43,39,0.92);color:#fff;letter-spacing:0.12em;">Gifted by ${escapeHtml(otherClaim)}</span>` : ""}
+        ${youGifted ? `<span class="card__pricetag card__pricetag--solid" style="left:12px;right:auto;top:12px;background:var(--brand-darker);color:var(--brand-glow);letter-spacing:0.12em;">★ You gifted this</span>` : ""}
+      </div>
+      <div class="card__body">
+        <span class="card__eyebrow">${escapeHtml(item.eyebrow)}</span>
+        <h3 class="card__title">${escapeHtml(item.name)}</h3>
+        <p class="card__desc">${escapeHtml(item.desc)}</p>
+        <ul class="card__bullets">
+          ${item.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="card__foot">
+        <div class="card__price">
+          <strong>${usd(item.priceUSD)}</strong>
+          <span>${otherClaim ? "Already claimed" : youGifted ? "Your gift · charged at check-in" : "Gift in full · for the couple"}</span>
+        </div>
+        ${otherClaim
+          ? `<button class="btn btn--ghost" disabled style="opacity:0.55;cursor:not-allowed;">Already gifted</button>`
+          : youGifted
+            ? `<button class="btn btn--added" data-gift-toggle="${item.id}">Gifted</button>`
+            : `<button class="btn" data-gift-toggle="${item.id}">Gift this experience</button>`}
+      </div>
+    </article>
+  `;
+}
+
+function renderRegistryFundCard(item, yourContribution, raised, goal, pct) {
+  const quick = [50, 100, 250, 500];
+  const giftedAny = yourContribution > 0;
+  const cardClass = `card${giftedAny ? " card--yours" : ""}`;
+  const inputDefault = yourContribution || 100;
+  return `
+    <article class="${cardClass}" data-registry-card="${item.id}">
+      <div class="card__photo" style="background-image:url('${item.photo}')">
+        <span class="card__pricetag card__pricetag--solid" style="background:var(--coral);color:#fff;letter-spacing:0.12em;">Honeymoon fund</span>
+        ${giftedAny ? `<span class="card__pricetag card__pricetag--solid" style="left:12px;right:auto;top:12px;background:var(--brand-darker);color:var(--brand-glow);letter-spacing:0.12em;">★ You added ${usd(yourContribution)}</span>` : ""}
+      </div>
+      <div class="card__body">
+        <span class="card__eyebrow">${escapeHtml(item.eyebrow)}</span>
+        <h3 class="card__title">${escapeHtml(item.name)}</h3>
+        <p class="card__desc">${escapeHtml(item.desc)}</p>
+
+        <div class="fund-meta">
+          <span><strong>${usd(raised)}</strong> raised</span>
+          <span>${usd(goal)} goal · ${pct}%</span>
+        </div>
+        <div class="fund-bar" aria-hidden="true"><span style="width:${pct}%"></span></div>
+
+        <div class="contribute-row">
+          <label class="amount-label" for="reg-fund-input">Contribute</label>
+          <span class="amount-input">
+            <input type="number" min="0" step="10" id="reg-fund-input"
+                   value="${inputDefault}"
+                   aria-label="Contribution amount in dollars" />
+          </span>
+          <div class="quick" role="group" aria-label="Quick amounts">
+            ${quick.map(a => `<button type="button" data-fund-quick="${a}">$${a}</button>`).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="card__foot">
+        <div class="card__price">
+          ${giftedAny
+            ? `<strong>${usd(yourContribution)}</strong><span>Your contribution · combined with others</span>`
+            : `<strong>Any amount</strong><span>100% goes to Aria &amp; Marcus</span>`}
+        </div>
+        ${giftedAny
+          ? `<button class="btn btn--added" data-fund-update>Contribution added</button>`
+          : `<button class="btn" data-fund-add>Add to itinerary</button>`}
+      </div>
+    </article>
+  `;
+}
+
+function attachRegistry() {
+  /* Full experience: gift in full / remove gift */
+  document.querySelectorAll("[data-gift-toggle]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-gift-toggle");
+      const item = REGISTRY.find(r => r.id === id);
+      if (!item) return;
+      const has = state.registryGifts.some(g => g.id === id);
+      if (has) {
+        state.registryGifts = state.registryGifts.filter(g => g.id !== id);
+        showToast(`Gift removed · ${item.name}`);
+      } else {
+        state.registryGifts = [
+          ...state.registryGifts,
+          { id, amount: item.priceUSD, type: "full" },
+        ];
+        state.cartOpen = true;
+        showToast(`Gifted ${item.name} for Aria & Marcus`);
+      }
+      saveState();
+      route();
+    });
+  });
+
+  /* Fund card — quick-pick chips just populate the input;
+     they don't commit until the guest hits Add / Update. */
+  const fundItem = REGISTRY.find(r => r.type === "fund");
+  if (!fundItem) return;
+  const input = document.getElementById("reg-fund-input");
+
+  document.querySelectorAll("[data-fund-quick]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (input) {
+        input.value = btn.getAttribute("data-fund-quick");
+        input.focus();
+      }
+    });
+  });
+
+  function commitFund(amount, isUpdate) {
+    if (!Number.isFinite(amount) || amount <= 0) {
+      showToast("Pick an amount to contribute");
+      return;
+    }
+    state.registryGifts = [
+      ...state.registryGifts.filter(g => g.id !== fundItem.id),
+      { id: fundItem.id, amount, type: "fund" },
+    ];
+    state.cartOpen = true;
+    saveState();
+    showToast(isUpdate
+      ? `Honeymoon fund updated · ${usd(amount)}`
+      : `${usd(amount)} added to Aria & Marcus's honeymoon fund`);
+    route();
+  }
+
+  document.querySelectorAll("[data-fund-add]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const amount = Math.max(0, Math.round(Number(input?.value) || 0));
+      commitFund(amount, false);
+    });
+  });
+
+  /* When the contribution is already added, the same button
+     becomes an "update" affordance — committing whatever's in
+     the input now. We also commit on blur of the input so the
+     amount stays in sync if the guest just edits the number. */
+  document.querySelectorAll("[data-fund-update]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const amount = Math.max(0, Math.round(Number(input?.value) || 0));
+      if (amount === 0) {
+        state.registryGifts = state.registryGifts.filter(g => g.id !== fundItem.id);
+        saveState();
+        showToast("Honeymoon contribution removed");
+        route();
+        return;
+      }
+      commitFund(amount, true);
+    });
+  });
+
+  if (input) {
+    input.addEventListener("change", () => {
+      if (!state.registryGifts.some(g => g.id === fundItem.id)) return;
+      const amount = Math.max(0, Math.round(Number(input.value) || 0));
+      if (amount > 0) commitFund(amount, true);
+    });
+  }
+}
+
+/* ============================================================
+   PROFILE — account view + referral program
+   — The profile screen is reached by clicking the avatar / name
+   in the top bar (or the "Refer · earn" pill). It shows the
+   guest's account info, then the big referral hero, then a
+   compact recap of their itinerary. The referral hero is the
+   star: it shows the unlock path (1 friend books → free $245
+   round-trip transportation voucher), the guest's deterministic
+   referral code + link, share buttons (email / text / native),
+   an inline invite form, and a list of every friend the guest
+   has invited with per-friend status.
+   ============================================================ */
+
+function renderProfile() {
+  const name  = state.guest.name  || DEFAULT_GUEST.name;
+  const email = state.guest.email || DEFAULT_GUEST.email;
+  const code  = makeReferralCode(email);
+  const link  = referralLink(email);
+
+  /* Tally referral status — drives the unlock badge + progress bar. */
+  const friends   = state.referrals || [];
+  const booked    = friends.filter(r => r.status === "booked").length;
+  const invited   = friends.filter(r => r.status === "invited").length;
+  const unlocked  = booked >= 1;
+  const goalCount = 1;                                  // single-tier reward
+  const progress  = Math.min(100, Math.round((booked / goalCount) * 100));
+
+  /* Compact recap — quick snapshot of everything they've added. */
+  const addOns   = state.spa.length + state.exc.length;
+  const gifts    = (state.registryGifts || []).length;
+  const giftSum  = (state.registryGifts || []).reduce((s, g) => s + (g.amount || 0), 0);
+  const roomLine = state.room
+    ? (ROOMS.find(r => r.id === state.room.roomId)?.name || "Room held")
+    : "Not booked yet";
+  const rsvpLabel = state.rsvp === "yes"   ? "Coming · RSVP confirmed"
+                  : state.rsvp === "maybe" ? "Maybe · pending"
+                  : state.rsvp === "no"    ? "Sending love · can't make it"
+                  : "RSVP not sent yet";
+
+  /* Pre-filled share strings — mailto and sms links open the user's
+     native composer with the message ready to send. */
+  const emailSubject = encodeURIComponent("Come to Aria & Marcus's wedding with me");
+  const emailBody = encodeURIComponent(
+    `Hi —\n\nAria & Marcus are getting married at AVA Resort Cancún on March 14, 2026, and I'd love to have you there with me. ` +
+    `If you book your room through this link, the All-In Weddings team handles the rest:\n\n${link}\n\n` +
+    `(Use referral code ${code} if it asks.)\n\nXO,\n${name.split(" ")[0] || "Sofía"}`
+  );
+  const smsBody = encodeURIComponent(
+    `Come to Aria & Marcus's wedding at AVA Cancún with me — book through ${link} (ref ${code}).`
+  );
+
+  const friendsHtml = friends.length === 0
+    ? `<li class="friend-row" style="opacity:0.7;">
+         <div class="friend-row__avatar">·</div>
+         <div class="friend-row__body">
+           <div class="friend-row__name">No invites sent yet</div>
+           <div class="friend-row__email">Use the form above to invite a friend.</div>
+         </div>
+         <span></span><span></span>
+       </li>`
+    : friends.map((r, i) => `
+        <li class="friend-row">
+          <div class="friend-row__avatar">${escapeHtml(initials(r.name || r.email))}</div>
+          <div class="friend-row__body">
+            <div class="friend-row__name">${escapeHtml(r.name || r.email)}</div>
+            <div class="friend-row__email">${escapeHtml(r.email)} · invited ${escapeHtml(formatShortDate(r.invitedAt))}</div>
+          </div>
+          ${r.status === "booked"
+            ? `<span class="friend-pill friend-pill--booked">★ Booked ${escapeHtml(formatShortDate(r.bookedAt))}</span>`
+            : `<span class="friend-pill friend-pill--invited">Pending</span>`}
+          ${r.status === "invited"
+            ? `<button type="button" class="friend-row__action" data-resend="${i}">Resend</button>`
+            : `<span></span>`}
+        </li>
+      `).join("");
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav("")}
+    <main class="section">
+      <div class="section__head">
+        <button type="button" class="section__back" data-section="home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+      </div>
+      <p class="section__eyebrow">Your profile</p>
+      <h1 class="section__title">Hey, <em>${escapeHtml(name.split(" ")[0] || "Guest")}</em>.</h1>
+      <p class="section__sub">Everything tied to your name for Aria &amp; Marcus's weekend — your account, your referral rewards, and a quick recap of what you've added so far.</p>
+    </main>
+
+    <section class="profile-hero" aria-label="Account summary">
+      <div class="profile-hero__avatar" aria-hidden="true">${escapeHtml(initials(name))}</div>
+      <div class="profile-hero__body">
+        <h2 class="profile-hero__name">${escapeHtml(name)}</h2>
+        <p class="profile-hero__email">${escapeHtml(email)}</p>
+        <div class="profile-hero__pills">
+          <span class="profile-pill profile-pill--brand">${escapeHtml(state.guest.party || DEFAULT_GUEST.party)}</span>
+          <span class="profile-pill">${escapeHtml(rsvpLabel)}</span>
+          ${unlocked
+            ? `<span class="profile-pill profile-pill--coral">★ ${booked} voucher${booked > 1 ? "s" : ""} earned</span>`
+            : `<span class="profile-pill">${invited} invite${invited === 1 ? "" : "s"} pending</span>`}
+        </div>
+      </div>
+      <button type="button" class="profile-hero__signout" id="profile-signout">Sign out</button>
+    </section>
+
+    <section class="referral-card" aria-label="Refer a friend and earn a transportation voucher">
+      <span class="referral-card__eyebrow">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .8-4.5 4 1.2 6.2L12 16l-5.7 3 1.2-6.2L3 8.8l6-.8 3-6z" fill="currentColor"/></svg>
+        Refer a friend · earn a free transportation voucher
+      </span>
+      <h2 class="referral-card__title">Bring a friend, get a <em>free ${usd(VOUCHER_USD)} airport voucher</em>.</h2>
+      <p class="referral-card__sub">When a friend you invite books their room block at AVA, All-In Weddings credits your itinerary with a free round-trip airport voucher — Diego picks you up, no charge. One friend, one voucher. Multiple friends? Multiple vouchers, applied or banked for the wedding party.</p>
+
+      <div class="referral-card__grid">
+        <div>
+          <div class="reward-strip">
+            <div class="reward-strip__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 11l3-5h12l3 5v6h-2a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H3v-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+                <circle cx="8" cy="17" r="1.7" fill="currentColor"/>
+                <circle cx="16" cy="17" r="1.7" fill="currentColor"/>
+              </svg>
+            </div>
+            <div>
+              <p class="reward-strip__label">${unlocked ? "Voucher unlocked" : "Unlocks after 1 friend books"}</p>
+              <h3 class="reward-strip__title">Free round-trip airport service · Diego</h3>
+              <p class="reward-strip__value">CUN ↔ AVA Resort Cancún · <strong>${usd(VOUCHER_USD)} value</strong> · ${unlocked ? "ready to apply at check-in or auto-applied to your transport line" : "credited the moment a friend books"}</p>
+            </div>
+          </div>
+          <div class="reward-progress">
+            <p class="reward-progress__meta">
+              <span><strong>${booked}</strong> of ${goalCount} friend${goalCount > 1 ? "s" : ""} booked</span>
+              <span>${invited} invite${invited === 1 ? "" : "s"} pending</span>
+            </p>
+            <div class="reward-progress__bar" aria-hidden="true">
+              <span style="width:${progress}%"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-stack">
+          <div class="share-row">
+            <span class="share-row__label">Your referral code</span>
+            <span class="share-row__value" id="referral-code">${escapeHtml(code)}</span>
+            <button type="button" class="share-row__copy" data-copy-target="referral-code" data-copy-label="Code">Copy code</button>
+          </div>
+          <div class="share-row">
+            <span class="share-row__label">Share link</span>
+            <span class="share-row__value" id="referral-link">${escapeHtml(link)}</span>
+            <button type="button" class="share-row__copy" data-copy-target="referral-link" data-copy-label="Link">Copy link</button>
+          </div>
+          <div class="share-buttons">
+            <a href="mailto:?subject=${emailSubject}&body=${emailBody}" data-share-email>
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Email a friend
+            </a>
+            <a href="sms:?&body=${smsBody}" data-share-text>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H7l-3 3V5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              Send a text
+            </a>
+            <button type="button" data-share-native>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12 M8 7l4-4 4 4 M5 13v6h14v-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Share…
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form class="invite-form" id="invite-form">
+        <p class="invite-form__title">Or invite directly — we'll send the email for you</p>
+        <div class="invite-form__row">
+          <input type="text" name="friendName" placeholder="Friend's name" autocomplete="off" required />
+          <input type="email" name="friendEmail" placeholder="friend@email.com" autocomplete="off" required />
+          <button type="submit">Send invite</button>
+        </div>
+      </form>
+
+      <ul class="friend-list" aria-label="Friends you've invited">
+        ${friendsHtml}
+      </ul>
+    </section>
+
+    <section class="recap" aria-label="Itinerary recap">
+      <header class="recap__head">
+        <h2 class="recap__title">Your weekend so far</h2>
+        <button type="button" class="recap__cta" data-section="schedule">See full schedule →</button>
+      </header>
+      <div class="recap__grid">
+        <div class="recap__cell">
+          <p class="recap__cell-lbl">Room</p>
+          <p class="recap__cell-val">${escapeHtml(roomLine)}</p>
+        </div>
+        <div class="recap__cell">
+          <p class="recap__cell-lbl">Spa &amp; excursions</p>
+          <p class="recap__cell-val"><em>${addOns}</em> added</p>
+        </div>
+        <div class="recap__cell">
+          <p class="recap__cell-lbl">Wedding gifts</p>
+          <p class="recap__cell-val">${gifts > 0 ? `<em>${gifts}</em> · ${usd(giftSum)}` : "None yet"}</p>
+        </div>
+        <div class="recap__cell">
+          <p class="recap__cell-lbl">Transportation</p>
+          <p class="recap__cell-val">${state.transport?.booked ? `Diego · round-trip${unlocked ? " <em>(voucher applied)</em>" : ""}` : (unlocked ? `<em>Voucher</em> ready` : "Not booked")}</p>
+        </div>
+      </div>
+    </section>
+  `);
+  attachChrome();
+  attachProfile();
+  renderCart();
+}
+
+function formatShortDate(iso) {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso + "T12:00:00");
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  } catch (_) { return iso; }
+}
+
+function attachProfile() {
+  /* Copy-to-clipboard for the code + link rows. Falls back to a
+     toast even if Clipboard API isn't available (e.g. insecure
+     contexts) so the demo never feels broken. */
+  document.querySelectorAll("[data-copy-target]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const targetId = btn.getAttribute("data-copy-target");
+      const label    = btn.getAttribute("data-copy-label") || "Copied";
+      const text = document.getElementById(targetId)?.textContent || "";
+      const original = btn.textContent;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed"; ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+        btn.dataset.copied = "true";
+        btn.textContent = "Copied ✓";
+        showToast(`${label} copied to clipboard`);
+        setTimeout(() => {
+          btn.dataset.copied = "false";
+          btn.textContent = original;
+        }, 1600);
+      } catch (_) {
+        showToast(`${label}: ${text}`);
+      }
+    });
+  });
+
+  /* Native share — when available (mobile Safari, Chrome Android)
+     this surfaces the OS share sheet. Otherwise falls back to
+     copying the link. */
+  document.querySelectorAll("[data-share-native]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const email = state.guest.email || DEFAULT_GUEST.email;
+      const link  = referralLink(email);
+      const code  = makeReferralCode(email);
+      const shareData = {
+        title: "Aria & Marcus's wedding",
+        text:  `Come to Aria & Marcus's wedding at AVA Cancún with me — book through this link and I get a free transportation voucher!`,
+        url:   link,
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          showToast("Shared · thanks for spreading the word");
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text} ${link} (code ${code})`);
+          showToast("Share message copied — paste it anywhere");
+        }
+      } catch (_) { /* user cancelled */ }
+    });
+  });
+
+  /* Invite form — adds a pending friend to state.referrals and
+     simulates "we sent the email" with a toast. */
+  const form = document.getElementById("invite-form");
+  if (form) {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const friendName  = String(fd.get("friendName") || "").trim();
+      const friendEmail = String(fd.get("friendEmail") || "").trim();
+      if (!friendName || !friendEmail) return;
+      /* Block obvious duplicates by email match */
+      const dup = (state.referrals || []).some(r => r.email.toLowerCase() === friendEmail.toLowerCase());
+      if (dup) {
+        showToast(`${friendName.split(" ")[0]} is already on your invite list`);
+        return;
+      }
+      const today = new Date().toISOString().slice(0, 10);
+      state.referrals = [
+        ...(state.referrals || []),
+        { name: friendName, email: friendEmail, status: "invited", invitedAt: today },
+      ];
+      saveState();
+      showToast(`Invite sent to ${friendName.split(" ")[0]} — we'll ping you when they book`);
+      route();
+    });
+  }
+
+  /* Resend stub — refreshes the invitedAt timestamp so the row
+     visibly updates, and toasts the user. */
+  document.querySelectorAll("[data-resend]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = +btn.getAttribute("data-resend");
+      const r = state.referrals[idx];
+      if (!r) return;
+      const today = new Date().toISOString().slice(0, 10);
+      state.referrals = state.referrals.map((row, i) =>
+        i === idx ? { ...row, invitedAt: today } : row);
+      saveState();
+      showToast(`Reminder sent to ${r.name.split(" ")[0]}`);
+      route();
+    });
+  });
+
+  /* Sign out from the profile hero — mirrors the bar action. */
+  document.getElementById("profile-signout")?.addEventListener("click", () => {
+    state.loggedIn = false;
+    saveState();
+    route();
+  });
+}
+
+/* ============================================================
+   SCHEDULE (full)
+   ============================================================ */
+
+function renderSchedule() {
+  const extend = extendStayState();
+
+  setApp(`
+    ${renderBar()}
+    ${renderNav("schedule")}
+    <main class="section">
+      <div class="section__head">
+        <button type="button" class="section__back" data-section="home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+      </div>
+      <p class="section__eyebrow">Schedule · Mar 13–15, 2026</p>
+      <h1 class="section__title">The whole <em>weekend</em>, on one page.</h1>
+      <p class="section__sub">All times in Eastern Standard (EST · UTC-5 · Cancún time, no DST). The plain rows below are Aria's locked events; the card rows are Allie's recommended add-ons with All-In wedding-block pricing — tap to add or remove anytime.</p>
+    </main>
+
+    <section class="extend-banner" aria-label="Extend your stay promotion">
+      <div class="extend-banner__body">
+        <span class="extend-banner__chip">−10% off block rate</span>
+        <h3 class="extend-banner__title">Extend your stay for <em>10% off</em></h3>
+        <p class="extend-banner__sub">${extend.sub}</p>
+      </div>
+      <button type="button" class="extend-banner__cta" data-extend-night ${extend.disabled ? "disabled" : ""}>
+        ${extend.ctaLabel}
+      </button>
+    </section>
+
+    ${renderTimeline({ showTransport: true })}
+
+    ${renderRecoveryBundle()}
+
+    <main class="section" style="padding-top:0;">
+      <section class="rsvp" style="margin-top:8px;">
+        <p class="section__eyebrow">Logistics</p>
+        <h2 class="section__title" style="font-size:26px;">Need-to-know.</h2>
+        <ul style="margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:13px; color:var(--ink-soft); line-height:1.55;">
+          <li><strong style="color:var(--ink);">Airport:</strong> Cancún International (CUN), 25 minutes from the resort. Hotel shuttle included with the room block — book through the Stay tab.</li>
+          <li><strong style="color:var(--ink);">Currency:</strong> US dollars accepted everywhere on property. Tip in either USD or pesos — both happily.</li>
+          <li><strong style="color:var(--ink);">Weather:</strong> low-80s, light Caribbean breeze. Pack a light layer for the 7 PM AVA Salon Ballroom reception.</li>
+          <li><strong style="color:var(--ink);">Hashtag:</strong> ${escapeHtml(WEDDING.hashtag)} — Aria is collecting everyone's photos here for the wedding album.</li>
+          <li><strong style="color:var(--ink);">Questions:</strong> reply to the email this portal came from and your concierge (Allie) will jump in within 24 hrs.</li>
+        </ul>
+      </section>
+    </main>
+  `);
+  attachChrome();
+  attachTimeline();
+  attachExtendStay();
+  attachRecoveryBundle();
+  renderCart();
+}
+
+/* ============================================================
+   Extend-stay promo helpers
+   — On Schedule, guests can extend their room block by one night
+   at a 10% discount on the block rate. Hooked to the room booking
+   if present; otherwise routes to Stay to pick a room first.
+   ============================================================ */
+const EXTEND_MAX_CHECKOUT = "2026-03-22"; // matches the Stay form max
+
+function extendStayState() {
+  if (!state.room) {
+    return {
+      ctaLabel: "Add an additional night →",
+      sub: "Stay an extra night at AVA — recover by the pool, snorkel one more day, fly home rested. Wedding-block guests get an extra 10% off the block rate on nights before or after the wedding weekend. Pick your room first, then tap to extend.",
+      disabled: false,
+    };
+  }
+  const co = state.room.checkOut;
+  const atMax = co >= EXTEND_MAX_CHECKOUT;
+  const r = ROOMS.find(x => x.id === state.room.roomId);
+  const nights = countNights(state.room.checkIn, co) || 2;
+  const extraNightUSD = r ? Math.round(r.blockUSD * 0.9) : null;
+  if (atMax) {
+    return {
+      ctaLabel: "Maxed out — call concierge",
+      sub: `You're booked through ${co}, the longest extension on the block. Reply to Allie to add nights past Sun Mar 22 — she'll quote the published rate directly.`,
+      disabled: true,
+    };
+  }
+  return {
+    ctaLabel: "Add an additional night →",
+    sub: `You're currently booked for ${nights} ${nights === 1 ? "night" : "nights"} (${state.room.checkIn} → ${co}). Add a Sunday-night recovery day at the wedding block rate${extraNightUSD ? ` — about ${usd(extraNightUSD)} for the extra night after the 10% discount` : ""}. Most ${WEDDING.couple.split(" ")[0]} & ${WEDDING.partner.split(" ")[0]} guests are staying through Monday brunch.`,
+    disabled: false,
+  };
+}
+
+function addOneNight(iso) {
+  const d = new Date(iso + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+function attachExtendStay() {
+  document.querySelectorAll("[data-extend-night]").forEach(btn => {
+    if (btn.hasAttribute("disabled")) return;
+    btn.addEventListener("click", () => {
+      if (!state.room) {
+        state.section = "stay";
+        saveState();
+        route();
+        showToast("Pick your room — we'll apply the extra night with the 10% extension after.");
+        return;
+      }
+      const next = addOneNight(state.room.checkOut);
+      if (next > EXTEND_MAX_CHECKOUT) {
+        showToast("Already at the max extension — reply to Allie for longer stays");
+        return;
+      }
+      state.room = { ...state.room, checkOut: next };
+      saveState();
+      renderSchedule();
+      showToast(`Extra night added — checking out ${next}`);
+    });
+  });
+}
+
+/* ============================================================
+   Recovery-bundle helpers
+   — Post-wedding bundle: +1 hotel night and a 20%-off massage.
+   The massage is the discounted Hot Stones & Hydrotherapy ritual
+   from The Spa at AVA. Booking this also extends state.room.checkOut
+   by one day (if there's headroom on the block).
+   ============================================================ */
+const RECOVERY_BASE_MASSAGE_USD = 240;   // Hot Stones & Hydrotherapy rack rate
+const RECOVERY_MASSAGE_USD      = Math.round(RECOVERY_BASE_MASSAGE_USD * 0.8); // 192
+
+function renderRecoveryBundle() {
+  const booked = !!state.recovery?.booked;
+  const title  = booked
+    ? "Recovery bundle is in"
+    : "Need some time to <em>recover</em> post-wedding?";
+  const sub    = booked
+    ? "Extra night added at AVA, plus a 20% off Hot Stones & Hydrotherapy massage at The Spa. Allie will text Sunday morning to confirm the massage time."
+    : "Add an extra night at AVA and a 20% off massage. The wedding's over, the dance floor took its toll, and you've got nowhere to be — slow Monday morning, oceanfront balcony, then ease in with hot stones at The Spa.";
+  const cta    = booked ? "Booked — manage" : "Add my recovery bundle →";
+  return `
+    <section class="recovery-banner ${booked ? "recovery-banner--booked" : ""}" aria-label="Post-wedding recovery bundle">
+      <div class="recovery-banner__body">
+        <span class="recovery-banner__chip">−20% massage · +1 night</span>
+        <h3 class="recovery-banner__title">${title}</h3>
+        <p class="recovery-banner__sub">${sub}</p>
+        <ul class="recovery-banner__bullets">
+          <li>Extra night at the block rate</li>
+          <li>Hot Stones &amp; Hydrotherapy · 60 min</li>
+          <li>Late checkout · 2 PM</li>
+        </ul>
+      </div>
+      <button type="button" class="recovery-banner__cta" data-book-recovery>
+        ${cta}
+      </button>
+    </section>
+  `;
+}
+
+function attachRecoveryBundle() {
+  document.querySelectorAll("[data-book-recovery]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (state.recovery?.booked) {
+        state.recovery = null;
+        saveState();
+        renderSchedule();
+        showToast("Recovery bundle removed");
+        return;
+      }
+      let extendedNight = false;
+      if (state.room) {
+        const next = addOneNight(state.room.checkOut);
+        if (next <= EXTEND_MAX_CHECKOUT) {
+          state.room = { ...state.room, checkOut: next };
+          extendedNight = true;
+        }
+      }
+      state.recovery = {
+        booked: true,
+        massageUSD: RECOVERY_MASSAGE_USD,
+        extendedNight,
+      };
+      state.cartOpen = true;
+      saveState();
+      renderSchedule();
+      if (!state.room) {
+        showToast("Massage added at −20% · pick a room to lock the extra night");
+      } else if (extendedNight) {
+        showToast(`Recovery bundle added · extra night + massage at ${usd(RECOVERY_MASSAGE_USD)}`);
+      } else {
+        showToast("Massage added at −20% · stay already at the max extension");
+      }
+    });
+  });
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+
+route();
+</script>
+</body>
+</html>
