@@ -3410,6 +3410,285 @@
       .mail__cta { width: 100%; justify-content: center; }
     }
 
+    /* ============================================================
+       Matching interstitial (post-login personalization)
+       — Chat-style screen with sequenced fade-up animations: two
+       Allie bubbles, a mood-preview card with palette + image, and
+       the primary "Explore your weekend portal" CTA. All steps use
+       the shared @keyframes matchFadeUp with staggered delays.
+       ============================================================ */
+    @keyframes matchFadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes matchDot {
+      0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
+      40%           { opacity: 1;    transform: scale(1);   }
+    }
+    @keyframes matchPalette {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    .match-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(640px 320px at 100% 0%, rgba(200,48,122,0.10), transparent 60%),
+        radial-gradient(560px 320px at 0% 100%, rgba(63,169,181,0.08), transparent 60%),
+        var(--paper-warm);
+      padding: 22px 22px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .match-page__chrome {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 24px;
+      border-bottom: 1px solid var(--rule-soft);
+      margin-bottom: 28px;
+    }
+    .match-page__brand {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep);
+    }
+    .match-page__brand-mark {
+      width: 24px; height: 24px;
+      display: grid; place-items: center;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 9999px;
+    }
+    .match-page__welcome {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+    .match-page__body {
+      width: 100%;
+      max-width: 560px;
+    }
+    .match-page__eyebrow {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-deep);
+      margin: 0 0 10px;
+    }
+    .match-page__title {
+      font-family: var(--serif);
+      font-size: 34px; line-height: 1.1;
+      letter-spacing: -0.4px;
+      color: var(--ink);
+      margin: 0 0 32px;
+    }
+    .match-page__title em {
+      font-style: italic;
+      color: var(--brand-deep);
+    }
+
+    .match-thread {
+      display: flex; flex-direction: column;
+      gap: 18px;
+    }
+
+    .match-bubble, .match-mood, .match-cta-row {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: matchFadeUp 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .match-bubble[data-step="1"]   { animation-delay: 200ms; }
+    .match-bubble[data-step="2"]   { animation-delay: 1500ms; }
+    .match-mood[data-step="3"]     { animation-delay: 2800ms; }
+    .match-cta-row[data-step="4"]  { animation-delay: 4900ms; }
+
+    .match-bubble {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .match-bubble__avatar {
+      width: 44px; height: 44px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 9999px;
+      display: grid; place-items: center;
+      box-shadow: 0 4px 12px -6px rgba(200,48,122,0.5);
+    }
+    .match-bubble__avatar svg { width: 20px; height: 20px; }
+    .match-bubble__body {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 0 14px 14px 14px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    }
+    .match-bubble__line {
+      margin: 0;
+      font-size: 14px; line-height: 1.55;
+      color: var(--ink-soft);
+    }
+    .match-bubble__line + .match-bubble__line { margin-top: 10px; }
+    .match-bubble__line--quiet {
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+    .match-bubble__line strong {
+      color: var(--brand-deep);
+      font-weight: 600;
+    }
+    /* Typing dots — only render on the first bubble while step 2 is
+       still pending; hidden as soon as step 2 begins its animation */
+    .match-bubble__dots {
+      display: inline-flex;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .match-bubble__dots span {
+      width: 6px; height: 6px;
+      background: var(--brand);
+      border-radius: 9999px;
+      animation: matchDot 1.4s infinite ease-in-out;
+    }
+    .match-bubble__dots span:nth-child(2) { animation-delay: 0.2s; }
+    .match-bubble__dots span:nth-child(3) { animation-delay: 0.4s; }
+    /* Hide the typing dots once the second bubble has appeared */
+    .match-bubble[data-step="1"] .match-bubble__dots {
+      animation: matchFadeUp 400ms ease-out 1400ms reverse forwards;
+    }
+
+    /* Mood preview card — palette swatches that fill in left-to-right,
+       a photo strip, and three sequential status lines that build up */
+    .match-mood {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px -14px rgba(95,17,56,0.25);
+      margin-left: 56px;
+    }
+    .match-mood__head {
+      padding: 20px 22px 16px;
+      background: var(--paper-warm);
+    }
+    .match-mood__copy {
+      margin: 0;
+      font-size: 15px; line-height: 1.5;
+      color: var(--ink);
+    }
+    .match-mood__copy strong {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--brand-deep);
+    }
+    .match-mood__copy--quiet {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 6px;
+    }
+    .match-mood__copy {
+      opacity: 0;
+      animation: matchFadeUp 420ms ease-out forwards;
+    }
+    .match-mood__copy[data-line="1"] { animation-delay: 3100ms; }
+    .match-mood__copy[data-line="2"] { animation-delay: 3700ms; }
+    .match-mood__copy[data-line="3"] { animation-delay: 4300ms; }
+
+    .match-mood__palette {
+      display: flex;
+      height: 14px;
+      width: 100%;
+    }
+    .match-mood__palette span {
+      flex: 1 0 0;
+      min-width: 0;
+      transform-origin: left center;
+      transform: scaleX(0);
+      animation: matchPalette 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .match-mood__palette span:nth-child(1) { animation-delay: 4600ms; }
+    .match-mood__palette span:nth-child(2) { animation-delay: 4720ms; }
+    .match-mood__palette span:nth-child(3) { animation-delay: 4840ms; }
+    .match-mood__palette span:nth-child(4) { animation-delay: 4960ms; }
+
+    .match-mood__photo {
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--paper-cream);
+      opacity: 0;
+      animation: matchFadeUp 520ms ease-out 4800ms forwards;
+    }
+
+    .match-cta-row {
+      margin-left: 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .match-cta {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 26px;
+      background: var(--brand);
+      color: #fff;
+      border: 0;
+      border-radius: 9999px;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -14px rgba(200,48,122,0.6);
+      transition: background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+    }
+    .match-cta:hover {
+      background: var(--brand-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px -14px rgba(200,48,122,0.7);
+    }
+    .match-cta:active { transform: translateY(0); }
+    .match-cta__hint {
+      margin: 0;
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* Reduced-motion users skip the staggered choreography — every
+       element appears immediately and the typing dots stop animating */
+    @media (prefers-reduced-motion: reduce) {
+      .match-bubble, .match-mood, .match-cta-row,
+      .match-mood__copy, .match-mood__photo {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .match-mood__palette span {
+        animation: none !important;
+        transform: scaleX(1) !important;
+      }
+      .match-bubble__dots { display: none; }
+    }
+
+    @media (max-width: 540px) {
+      .match-page { padding: 16px 14px 48px; }
+      .match-page__chrome { padding-bottom: 18px; margin-bottom: 22px; }
+      .match-page__welcome { display: none; }
+      .match-page__title { font-size: 26px; }
+      .match-bubble { grid-template-columns: 36px 1fr; gap: 10px; }
+      .match-bubble__avatar { width: 36px; height: 36px; }
+      .match-bubble__avatar svg { width: 16px; height: 16px; }
+      .match-mood, .match-cta-row { margin-left: 46px; }
+      .match-cta { width: 100%; justify-content: center; }
+    }
+
     /* Login screen */
     .login__hero {
       padding: 36px 28px 8px;
@@ -3817,6 +4096,12 @@ const defaultState = {
   guest: { name: "", email: "" },
   emailClicked: false,         // simulated invite-email screen on first visit
   loggedIn: false,
+  /* Allie's personalization-matching interstitial — shown ONCE after
+     every fresh login so the guest sees Allie "matching" them to the
+     wedding block before the portal reveals. Default `true` so anyone
+     resuming a saved session goes straight to the portal; the login
+     submit handler flips it to `false` to retrigger it. */
+  matchedReady: true,
   section: "stay",             // Stay is the primary landing tab — book first, browse second
   rsvp: null,                 // "yes" | "maybe" | "no"
   attending: "couple",        // "couple" | "solo" — drives the per-person assignment UI
@@ -4257,6 +4542,7 @@ function route() {
   }
   if (!state.emailClicked) return renderEmail();
   if (!state.loggedIn) return renderLogin();
+  if (!state.matchedReady) return renderMatching();
   switch (state.section) {
     case "home":       return renderHome();
     case "spa":        return renderSpa();
@@ -4380,11 +4666,127 @@ function renderLogin() {
       name:  name  || DEFAULT_GUEST.name,
     };
     state.loggedIn = true;
+    state.matchedReady = false; /* trigger Allie's matching interstitial */
     state.section = "stay";
     saveState();
     route();
   });
   renderCart();
+}
+
+/* ============================================================
+   MATCHING INTERSTITIAL (post-login)
+   — Allie's personalization screen: two staggered chat bubbles
+   from the AI concierge, a mood-preview card with palette and
+   image, and the primary "Explore your weekend portal" CTA.
+   Everything fades up via CSS animation-delay (~6s total) so it
+   feels like Allie is thinking. Click CTA → state.matchedReady
+   flips and the portal reveals on the Stay tab.
+   ============================================================ */
+
+function renderMatching() {
+  const firstName = (state.guest.name || DEFAULT_GUEST.name).split(/\s+/)[0] || "Sofía";
+  setApp(`
+    <div class="match-page">
+      <header class="match-page__chrome">
+        <span class="match-page__brand">
+          <span class="match-page__brand-mark" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l4 8h-8l4-8zM4 10h16l-8 12L4 10z" fill="currentColor"/>
+            </svg>
+          </span>
+          All-In Weddings · Concierge
+        </span>
+        <span class="match-page__welcome">Welcome, ${escapeHtml(firstName)}</span>
+      </header>
+
+      <main class="match-page__body" role="status" aria-live="polite" aria-busy="true">
+        <p class="match-page__eyebrow">Personalizing your weekend</p>
+        <h1 class="match-page__title">
+          Allie's <em>matching</em> you to the wedding.
+        </h1>
+
+        <div class="match-thread" aria-label="Concierge messages">
+
+          <div class="match-bubble match-bubble--allie" data-step="1">
+            <span class="match-bubble__avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3l3.5 6L22 12l-6.5 3L12 21l-3.5-6L2 12l6.5-3L12 3z" fill="currentColor"/>
+              </svg>
+            </span>
+            <div class="match-bubble__body">
+              <p class="match-bubble__line match-bubble__line--quiet">
+                Pulling Aria &amp; Marcus's invite list, your RSVP, and the AVA Resort Cancún wedding-block details…
+              </p>
+              <p class="match-bubble__line">
+                Cross-checking your weekend (<strong>Mar 13–15, 2026</strong>) against the wedding party's calendar and what they loved.
+              </p>
+              <span class="match-bubble__dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </span>
+            </div>
+          </div>
+
+          <div class="match-bubble match-bubble--allie" data-step="2">
+            <span class="match-bubble__avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3l3.5 6L22 12l-6.5 3L12 21l-3.5-6L2 12l6.5-3L12 3z" fill="currentColor"/>
+              </svg>
+            </span>
+            <div class="match-bubble__body">
+              <p class="match-bubble__line">
+                Here's your weekend at <strong>AVA Resort Cancún</strong> for <strong>Mar 14, 2026</strong>. I've filtered the spa, excursions, and transportation to what Aria's wedding party loved — and surfaced the wedding-block rate on every room.
+              </p>
+              <p class="match-bubble__line match-bubble__line--quiet">
+                Everything's editable anytime. Nothing's charged until you confirm.
+              </p>
+            </div>
+          </div>
+
+          <article class="match-mood" data-step="3" aria-label="Wedding theme preview">
+            <header class="match-mood__head">
+              <p class="match-mood__copy" data-line="1">
+                Based on the wedding theme: <strong>Coastal Magenta</strong>…
+              </p>
+              <p class="match-mood__copy match-mood__copy--quiet" data-line="2">
+                …Pulling rooms in the wedding block…
+              </p>
+              <p class="match-mood__copy match-mood__copy--quiet" data-line="3">
+                …Matching Allie's picks to your weekend…
+              </p>
+            </header>
+            <div class="match-mood__palette" aria-hidden="true">
+              <span style="background: var(--paper-cream);"></span>
+              <span style="background: var(--coral-soft);"></span>
+              <span style="background: var(--brand);"></span>
+              <span style="background: var(--brand-darker);"></span>
+            </div>
+            <div class="match-mood__photo" role="img"
+                 aria-label="AVA Resort Cancún oceanfront wedding setting"
+                 style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=72');"></div>
+          </article>
+
+          <div class="match-cta-row" data-step="4">
+            <button type="button" class="match-cta" data-match-continue>
+              Explore your weekend portal
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <p class="match-cta__hint">Wedding-block rate auto-applied · cancel up to 14 days before</p>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  `);
+
+  /* Continue → flip the gate and reveal the portal on the Stay tab. */
+  document.querySelector("[data-match-continue]")?.addEventListener("click", () => {
+    state.matchedReady = true;
+    saveState();
+    route();
+  });
 }
 
 /* ============================================================
