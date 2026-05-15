@@ -671,7 +671,45 @@
       margin: 0;
       line-height: 1.5;
     }
-    /* The ceremony tile gets a subtle magenta left bar + slightly heavier card */
+    /* Wedding-event cards — every hosted moment from Aria & Marcus
+       (welcome cocktails, ceremony, cocktail hour, reception, after-party,
+       farewell brunch, group photo). Soft magenta wash + magenta left bar
+       to read as a wedding invitation. Logistics rows (airport transfers,
+       optional spa hours) keep the plain paper treatment so the hierarchy
+       is immediately legible. */
+    .tl-row--wedding .tl-event {
+      background: linear-gradient(135deg, rgba(200,48,122,0.055) 0%, rgba(200,48,122,0.11) 100%);
+      border-color: rgba(200,48,122,0.30);
+      border-left: 2px solid var(--brand-deep);
+      padding-left: 17px;
+    }
+    .tl-row--wedding .tl-event:hover {
+      border-color: rgba(200,48,122,0.48);
+    }
+    .tl-row--wedding .tl-event__title { font-size: 18px; }
+    .tl-row--wedding .tl-row__dot {
+      background: var(--brand-deep);
+      box-shadow: inset 0 0 0 2px var(--brand-deep),
+                  0 0 0 3px rgba(200,48,122,0.16);
+    }
+    /* Tiny chip that quietly labels each non-ceremony wedding row */
+    .tl-event__chip {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brand-deep);
+      background: rgba(200,48,122,0.10);
+      border: 1px solid rgba(200,48,122,0.22);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      margin: 0 0 8px;
+    }
+
+    /* The ceremony tile is THE moment — heaviest treatment of all.
+       Inherits the wedding wash above, then layers a deeper border,
+       a soft shadow, the ✿ glyph, and a larger title. */
     .tl-row[data-key="ceremony"] .tl-event {
       border-color: rgba(200,48,122,0.45);
       background: linear-gradient(135deg, var(--paper) 0%, var(--paper-warm) 100%);
@@ -3064,21 +3102,26 @@ const DEFAULT_GUEST = { name: "Sofía Vargas", email: "sofia@vargas.co", party: 
    Each day uses a stable `day` key so we can splice in Allie's recommended
    upsells from `ALLIE_PICKS` further down. The ceremony row is flagged so
    the timeline can render it as the visual anchor of Saturday. */
+/* `wedding: true` marks the events that Aria & Marcus are hosting
+   (welcome cocktails, ceremony, cocktail hour, reception, after-party,
+   farewell brunch, group photo). The timeline renders those rows with
+   a soft magenta wash so they read visually as "wedding event cards"
+   distinct from logistics rows (airport transfers, optional spa hours). */
 const SCHEDULE = [
   { day: "fri", date: "FRI · MAR 13", title: "Welcome", events: [
     { time: "5:00 PM", what: "Airport transfers", em: "Complimentary shuttle from CUN · 25 min to the resort" },
-    { time: "7:00 PM", what: "Welcome cocktails — Oceanfront Terrace", em: "Open bar, mezcal flights, passed Yucatecan bites · attire: resort chic" },
+    { time: "7:00 PM", what: "Welcome cocktails — Oceanfront Terrace", em: "Open bar, mezcal flights, passed Yucatecan bites · attire: resort chic", wedding: true },
   ]},
   { day: "sat", date: "SAT · MAR 14", title: "Wedding day", events: [
     { time: "11:00 AM", what: "Pre-ceremony spa hours", em: "The Spa at AVA open early for the wedding party" },
-    { time: "4:00 PM",  what: "Ceremony — Oceanfront Terrace", em: "Seating opens 3:30 PM · linen aisle, bare feet welcome", key: "ceremony" },
-    { time: "5:30 PM",  what: "Cocktail hour — Sunset Cove", em: "Coral palomas, oceanfront passed bites" },
-    { time: "7:00 PM",  what: "Reception — AVA Salon Ballroom", em: "Long-table dinner, first dance, the Caribbean as backdrop" },
-    { time: "10:30 PM", what: "After-party — Coral Lounge", em: "DJ Mariposa on the decks until 2 AM" },
+    { time: "4:00 PM",  what: "Ceremony — Oceanfront Terrace", em: "Seating opens 3:30 PM · linen aisle, bare feet welcome", key: "ceremony", wedding: true },
+    { time: "5:30 PM",  what: "Cocktail hour — Sunset Cove", em: "Coral palomas, oceanfront passed bites", wedding: true },
+    { time: "7:00 PM",  what: "Reception — AVA Salon Ballroom", em: "Long-table dinner, first dance, the Caribbean as backdrop", wedding: true },
+    { time: "10:30 PM", what: "After-party — Coral Lounge", em: "DJ Mariposa on the decks until 2 AM", wedding: true },
   ]},
   { day: "sun", date: "SUN · MAR 15", title: "Farewell", events: [
-    { time: "10:30 AM", what: "Farewell brunch — Coral Garden", em: "Mezcal mimosas, taquería bar, casual" },
-    { time: "1:00 PM",  what: "Last group photo — Oceanfront Promenade", em: "Optional · plan your departure transfer after" },
+    { time: "10:30 AM", what: "Farewell brunch — Coral Garden", em: "Mezcal mimosas, taquería bar, casual", wedding: true },
+    { time: "1:00 PM",  what: "Last group photo — Oceanfront Promenade", em: "Optional · plan your departure transfer after", wedding: true },
   ]},
 ];
 
@@ -3907,6 +3950,7 @@ function renderTimeline(opts = {}) {
       what:    e.what,
       em:      e.em,
       key:     e.key || null,
+      wedding: !!e.wedding,
     }));
     const pickRows = ALLIE_PICKS.filter(p => p.day === day.day).map(p => {
       const inv  = p.cartKey === "spa" ? SPA : EXC;
@@ -3967,11 +4011,19 @@ function renderTransportCallout() {
 
 function renderFixedRow(r) {
   const dataKey = r.key ? ` data-key="${escapeHtml(r.key)}"` : "";
+  const cls = `tl-row${r.wedding ? " tl-row--wedding" : ""}`;
+  /* Show a tiny "Wedding event" chip on hosted moments, but not on
+     the ceremony — that row already has its own ✿ + heavier card
+     treatment and a chip would be redundant on top of it. */
+  const chip = (r.wedding && r.key !== "ceremony")
+    ? `<span class="tl-event__chip">Wedding event</span>`
+    : "";
   return `
-    <div class="tl-row"${dataKey}>
+    <div class="${cls}"${dataKey}>
       <div class="tl-row__time">${escapeHtml(r.time)}</div>
       <div class="tl-row__rail" aria-hidden="true"><span class="tl-row__dot"></span></div>
       <div class="tl-event">
+        ${chip}
         <h4 class="tl-event__title">${escapeHtml(r.what)}</h4>
         <p class="tl-event__sub">${escapeHtml(r.em)}</p>
       </div>
